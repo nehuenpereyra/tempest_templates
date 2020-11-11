@@ -1,5 +1,5 @@
 
-class Atrribute:
+class Attribute:
 
     def __init__(self, name, label, default, searchable, entity):
         self.name = name

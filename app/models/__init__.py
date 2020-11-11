@@ -1,3 +1,4 @@
 
 from .entity_builder import EntityBuilder
-from .atrribute import Atrribute
+from .attribute import Attribute
+from .entity import Entity
