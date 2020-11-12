@@ -4,10 +4,13 @@ from .type import Type
 
 class StringType(Type):
 
-    def __init__(self, builder, attribute, length, is_large):
-        super().__init__(builder, attribute)
+    def __init__(self, attribute, length, is_large=False):
+        super().__init__(attribute)
         self.length = length
         self.is_large = is_large
+
+    def __repr__(self):
+        return f"String({self.length})"
 
     def to_model(self):
         return f"String({str(self.length)})"

@@ -1,14 +1,22 @@
 import re
 
+
 class Entity:
 
     def __init__(self, name):
         self.name = name
         self.attributes = dict()
-    
+
+    def __repr__(self):
+        attributes_list = list(self.attributes.values())
+        return "[{}]\n{}".format(
+            self.name,
+            "\n".join(attributes_list.collect(lambda each: f"  {each}"))
+        )
+
     def get_name(self):
-        return self.name  
-        
+        return self.name
+
     def get_name_delimited(self):
         return re.sub("([A-Z])", "_\\1", self.name).strip().lower()[1:]
 
@@ -16,7 +24,7 @@ class Entity:
         name = self.get_name_delimited()
         if name[-1] == "y":
             return name[:-1] + "ies"
-        return self.name + "s" 
+        return name + "s"
 
     def add_attribute(self, attribute):
         self.attributes[attribute.name] = attribute

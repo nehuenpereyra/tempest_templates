@@ -1,8 +1,8 @@
 
 class Validator:
 
-    def __init__(self, atrribute):
-        self.atrribute = atrribute
+    def __init__(self, attribute):
+        self.attribute = attribute
 
     def toForm(self):
         pass

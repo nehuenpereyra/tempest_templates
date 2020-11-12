@@ -1,15 +1,22 @@
 
 class Attribute:
 
-    def __init__(self, name, label, default, searchable, entity):
+    def __init__(self, name, label, default, searchable):
         self.name = name
         self.label = label
         self.default = default
         self.searchable = searchable
-        self.entity = entity
-    
-    def set_type(self, type):
-        self.type = type  
+        self.type = None
+        self.validations = None
 
-    def set_validations(self, validations):
-        self.validations = validations
+    def __repr__(self):
+        validations_string = ", ".join(
+            self.validations.collect(lambda each: str(each)))
+
+        return f"{self.name}: {self.type} [{validations_string}]"
+
+    # def set_type(self, type):
+    #     self.type = type
+
+    # def set_validations(self, validations):
+    #     self.validations = validations

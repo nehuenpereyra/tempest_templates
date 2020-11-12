@@ -1,7 +1,7 @@
 
 class Type:
 
-    def __init__(self, builder, attribute):
+    def __init__(self, attribute):
         self.attribute = attribute
 
     def to_model(self):
@@ -10,7 +10,7 @@ class Type:
     def to_form(self):
         pass
 
-    def get_validators(self):
+    def get_validations(self):
         return list()
 
     def get_widget(self):
