@@ -33,9 +33,49 @@ def generate_model(main_json, entities):
 
     os.mkdir(model_path)
 
+    write_file(
+        os.path.join(model_path, "__init__.py"),
+        render_template("model_init", entities=entities)
+    )
+
     entities.do(lambda each: write_file(
         os.path.join(model_path, each.get_name_delimited() + ".py"),
         render_template("model", entity=each)
     ))
+
+    if entities.any_satisfy(lambda each: each.has_relationship_of_many_to_many()):
+        database_links_path = os.path.join(model_path, "database_links")
+
+        os.mkdir(database_links_path)
+
+        relationship_attributes = []
+        all_relationship_attributes = entities.flat_collect(
+            lambda each: each.get_many_to_many_relationship_attributes()
+        )
+
+        for attribute in all_relationship_attributes:
+            if not relationship_attributes.includes(attribute) and \
+                    not relationship_attributes.includes(attribute.type.linked_attribute):
+                relationship_attributes.add(attribute)
+
+        write_file(
+            os.path.join(database_links_path, "__init__.py"),
+            render_template("link_table_init", link_names=relationship_attributes.collect(
+                lambda each: each.type.get_import_link()
+            ))
+        )
+
+        relationship_attributes.do(lambda each: write_file(
+            os.path.join(
+                database_links_path,
+                each.type.get_import_link() + ".py"
+            ),
+            render_template(
+                "link_table",
+                table_name=each.type.get_import_link(),
+                primary_entity_name=each.entity.get_name_delimited(),
+                secondary_entity_name=each.type.linked_attribute.entity.get_name_delimited()
+            )
+        ))
 
     # print(render_template("example", value="user.name"))

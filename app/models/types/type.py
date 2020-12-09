@@ -4,6 +4,9 @@ class Type:
     def __init__(self, attribute):
         self.attribute = attribute
 
+    def is_relationship(self):
+        return False
+
     def to_model(self):
         pass
 

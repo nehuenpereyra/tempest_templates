@@ -2,12 +2,16 @@
 from app.db import db
 from sqlalchemy.ext.hybrid import hybrid_property
 
+[% for import_element in entity.get_import_list_for_model() %]
+[[ import_element ]]
+[% endfor %]
+
 class [[entity.get_name()]](db.Model):
 
     __id = db.Column("id", db.Integer, primary_key=True)
-    [% for attribute in entity.attributes %]
-[[ attribute.to_model() ]]
-    [% endfor %]
+[% for attribute in entity.attributes %]
+    [[ attribute.to_model() ]]
+[% endfor %]
 
     [% for attribute in entity.attributes %]
 

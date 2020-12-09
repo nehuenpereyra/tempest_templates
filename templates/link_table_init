@@ -1,0 +1,4 @@
+
+[% for link_name in link_names %]
+from .[[ link_name ]] import [[ link_name ]]
+[% endfor %]

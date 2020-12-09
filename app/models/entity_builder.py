@@ -13,7 +13,7 @@ class EntityBuilder:
         self.entities = dict()
 
     def add_entity(self, entity_json):
-        entity = Entity(entity_json["name"])
+        entity = Entity(name=entity_json["name"], order=len(self.entities))
         self.entities[entity.name] = entity
 
         for attribute_json in entity_json["attributes"]:

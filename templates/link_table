@@ -1,0 +1,7 @@
+
+from app.db import db
+
+
+[[ table_name ]] = db.Table("[[ table_name ]]",
+                          db.Column("[[ primary_entity_name ]]_id", db.Integer, db.ForeignKey("[[ primary_entity_name ]].id"), primary_key=True),
+                          db.Column("[[ secondary_entity_name ]]_id", db.Integer, db.ForeignKey("[[ secondary_entity_name ]].id"), primary_key=True))

@@ -1,7 +1,4 @@
 
-from app.models.types import RelationshipType
-
-
 class Attribute:
 
     def __init__(self, name, label, default, searchable):
@@ -22,8 +19,8 @@ class Attribute:
         return f"{self.name}: {self.type} [{validations_string}]"
 
     def to_model(self):
-        if self.type.__class__ != RelationshipType:
-            return '__{} = db.Column("{}", db.{}{})'.format(
+        if not self.type.is_relationship():
+            result = '__{} = db.Column("{}", db.{}{})'.format(
                 self.name,
                 self.name,
                 self.type.to_model(),
@@ -31,8 +28,25 @@ class Attribute:
                     .inject(lambda each, result: f"{result}, {each.to_model()}", "")
             )
         else:
-            return '__{} = db.relationship("{}", back_populates="{}")'.format(
+            linked_attribute = self.type.linked_attribute
+
+            result = '__{} = db.relationship("{}", back_populates="{}"{})'.format(
                 self.name,
-                self.type.linked_attribute.entity.get_name(),
-                self.type.linked_attribute.name
+                linked_attribute.entity.get_name(),
+                linked_attribute.name,
+                f", secondary={self.type.get_import_link()}" if self.type.has_cardinality_many_to_many(
+                ) else ""
             )
+
+            if self.type.has_cardinality_one():
+                if self.type.has_foreign_key:
+                    result += '\n{}__{} = db.Column("{}", db.Integer, db.ForeignKey("{}.id"){})'.format(
+                        " " * 4,
+                        f"{self.name}_id",
+                        f"{self.name}_id",
+                        linked_attribute.entity.get_name_delimited(),
+                        self.validations.select(lambda each: each.to_model())
+                            .inject(lambda each, result: f"{result}, {each.to_model()}", "")
+                    )
+
+        return result
