@@ -12,3 +12,10 @@ class IntegerType(Type):
 
     def to_form(self):
         return "IntegerField"
+    
+    def to_from(self):
+        return "wtforms"
+    
+    def to_import(self):
+        return "IntegerField"
+

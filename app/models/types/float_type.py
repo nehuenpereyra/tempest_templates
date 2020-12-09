@@ -9,3 +9,9 @@ class FloatType(Type):
 
     def to_form(self):
         return "FloatField"
+    
+    def to_from(self):
+        return "wtforms"
+    
+    def to_import(self):
+        return "FloatField"

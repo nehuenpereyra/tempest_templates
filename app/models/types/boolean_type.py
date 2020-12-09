@@ -12,3 +12,9 @@ class BooleanType(Type):
 
     def to_form(self):
         return "BooleanField"
+    
+    def to_from(self):
+        return "wtforms"
+    
+    def to_import(self):
+        return "BooleanField"

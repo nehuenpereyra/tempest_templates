@@ -41,3 +41,16 @@ class RelationshipType(Type):
             linked_attribute_name,
             linked_attribute_presented_name
         )
+
+    def to_form(self):
+        if self.cardinality == "one":
+            return "SelectField"
+        return "SelectMultipleField"
+    
+    def to_from(self):
+        return "wtforms"
+    
+    def to_import(self):
+        if self.cardinality == "one":
+            return "SelectField"
+        return "SelectMultipleField"

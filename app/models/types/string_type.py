@@ -22,3 +22,9 @@ class StringType(Type):
         if self.is_large:
             return "TextArea()"
         return super().get_widget()
+
+    def to_from(self):
+        return "wtforms"
+    
+    def to_import(self):
+        return "StringField"

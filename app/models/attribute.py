@@ -36,3 +36,12 @@ class Attribute:
                 self.type.linked_attribute.entity.get_name(),
                 self.type.linked_attribute.name
             )
+
+    def to_form(self):
+        return '{} = {}("{}", validators=[{}])'.format(
+                self.name,
+                self.type.to_form(),
+                self.label,
+                self.validations.select(lambda each: each.to_form())
+                    .inject(lambda each, result: f"{result}, {each.to_form()}", "")[1:]
+            )
