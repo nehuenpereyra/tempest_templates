@@ -6,5 +6,5 @@ class EmailValidator(Validator):
     def __repr__(self):
         return "Email"
 
-    def toForm(self):
+    def to_form(self):
         return "Email()"

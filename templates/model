@@ -1,0 +1,54 @@
+
+from app.db import db
+from sqlalchemy.ext.hybrid import hybrid_property
+
+class [[entity.get_name()]](db.Model):
+
+    __id = db.Column("id", db.Integer, primary_key=True)
+    [% for attribute in entity.attributes %]
+[[ attribute.to_model() ]]
+    [% endfor %]
+
+    [% for attribute in entity.attributes %]
+
+    @hybrid_property
+    def [[ attribute.name ]](self):
+        return self.__[[ attribute.name ]]
+
+    @[[ attribute.name ]].setter
+    def [[ attribute.name ]](self, [[ attribute.name ]]):
+        self.__[[ attribute.name ]] = [[ attribute.name ]]
+    [% endfor %]
+
+    def save(self):
+        if not self.__id:
+            db.session.add(self)
+        db.session.commit()
+
+    def remove(self):
+        if self.__id:
+            db.session.delete(self)
+            db.session.commit()
+
+    @staticmethod
+    def delete(id):
+        [[ entity.get_name_delimited() ]] = [[ entity.get_name() ]].query.get(id)
+        if [[ entity.get_name_delimited() ]]:
+            [[ entity.get_name_delimited() ]].remove()
+            return [[ entity.get_name_delimited() ]]
+        return None
+
+    @staticmethod
+    def all():
+        return [[ entity.get_name() ]].query.all()
+
+    @staticmethod
+    def get(id):
+        return [[ entity.get_name() ]].query.get(id)
+
+[% for attribute in entity.attributes %][% if attribute.searchable %]
+    @staticmethod
+    def find_by_[[ attribute.name ]]([[ attribute.name ]]):
+        return [[ entity.get_name() ]].query.filter_by([[ attribute.name ]]=[[ attribute.name ]])
+
+[% endif %][% endfor %]

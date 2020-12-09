@@ -12,10 +12,10 @@ class RequiredValidator(Validator):
             return "Required"
         return "Optional"
 
-    def toForm(self):
+    def to_form(self):
         if self.is_required:
             return "DataRequired()"
         return "Optional()"
 
-    def toModel(self):
+    def to_model(self):
         return f"nullable={not self.is_required}"

@@ -5,13 +5,12 @@ class Entity:
 
     def __init__(self, name):
         self.name = name
-        self.attributes = dict()
+        self.attributes = []
 
     def __repr__(self):
-        attributes_list = list(self.attributes.values())
         return "[{}]\n{}".format(
             self.name,
-            "\n".join(attributes_list.collect(lambda each: f"  {each}"))
+            "\n".join(self.attributes.collect(lambda each: f"  {each}"))
         )
 
     def get_name(self):
@@ -27,8 +26,8 @@ class Entity:
         return name + "s"
 
     def add_attribute(self, attribute):
-        self.attributes[attribute.name] = attribute
+        self.attributes.add(attribute)
         attribute.entity = self
 
     def get_attribute(self, name):
-        return self.attributes.get(name, None)
+        return self.attributes.detect(lambda each: each.name == name, None)

@@ -11,5 +11,5 @@ class LengthValidator(Validator):
     def __repr__(self):
         return f"Length({self.min}, {self.max})"
 
-    def toForm(self):
+    def to_form(self):
         return f"Length(min={self.min}, max={self.max})"
