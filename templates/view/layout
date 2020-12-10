@@ -1,6 +1,6 @@
 {% extends "[[ extends ]]" %}
 
-{% block title %}[[ entity.label ]] - {{ [[ entity.get_name_delimited() ]].[[ entity.get_main_attribute().name ]] }}{% endblock %}
+{% block title %}[% block title %]  [% endblock %]{% endblock %}
 
 {% block [[ main_block ]] %}
 
