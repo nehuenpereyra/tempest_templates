@@ -101,5 +101,8 @@ class Entity:
             )
         return import_list
 
+    def get_arguments_names_list(self):
+        return self.attributes.collect(lambda each: each.name)
+
     def get__list_args_resource(self):
         return ", ".join(self.attributes.collect(lambda each: f"{each.name} = form.{each.name}.data"))

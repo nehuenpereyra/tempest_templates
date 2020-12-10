@@ -98,6 +98,11 @@ def generate_form(main_json, entities):
 
     os.makedirs(form_path, exist_ok=True)
 
+    write_file(
+        os.path.join(form_path, "__init__.py"),
+        render_template("form_init", entities=entities)
+    )
+
     entities.do(lambda each: write_file(
         os.path.join(form_path, each.get_name_delimited() + ".py"),
         render_template("form", entity=each)

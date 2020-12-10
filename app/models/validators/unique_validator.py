@@ -11,7 +11,7 @@ class UniqueValidator(Validator):
         if self.is_unique:
             return "Unique"
         return "No unique"
-    
+
     def to_form(self):
         if self.is_unique:
             return f'Unique({self.attribute.entity.get_name()}, "{self.attribute.name}")'
@@ -20,11 +20,11 @@ class UniqueValidator(Validator):
         if self.is_unique:
             return "unique=True"
         return "unique=False"
-    
+
     def to_from(self):
         if self.is_unique:
-            return "forms.utility"
-    
+            return "app.helpers.forms.validations.unique"
+
     def to_import(self):
         if self.is_unique:
             return "Unique"

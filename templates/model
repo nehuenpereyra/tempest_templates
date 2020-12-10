@@ -13,6 +13,10 @@ class [[entity.get_name()]](db.Model):
     [[ attribute.to_model() ]]
 [% endfor %]
 
+    @hybrid_property
+    def id(self):
+        return self.__id
+
     [% for attribute in entity.attributes %]
 
     @hybrid_property
@@ -28,6 +32,11 @@ class [[entity.get_name()]](db.Model):
         if not self.__id:
             db.session.add(self)
         db.session.commit()
+
+    def update(self, [[ ", ".join(entity.get_arguments_names_list()) ]]):
+[% for attribute in entity.attributes %]
+        self.[[ attribute.name ]] = [[ attribute.name ]]
+[% endfor %]
 
     def remove(self):
         if self.__id:
@@ -45,6 +54,10 @@ class [[entity.get_name()]](db.Model):
     @staticmethod
     def all():
         return [[ entity.get_name() ]].query.all()
+
+    @staticmethod
+    def all_paginated(page, per_page):
+        return [[ entity.get_name() ]].query.paginate(page=page, per_page=per_page, error_out=False)
 
     @staticmethod
     def get(id):

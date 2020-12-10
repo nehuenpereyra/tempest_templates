@@ -12,6 +12,16 @@ def index():
                         per_page=Configuration.get().items_per_page)
     return render_template("[[entity.get_name_delimited()]]/index.html", [[entity.get_name_plural_delimited()]]=[[entity.get_name_plural_delimited()]], alert=get_alert())
 
+
+@permission('[[entity.get_name_delimited()]]_show')
+def show(id):
+    [[entity.get_name_delimited()]] = [[entity.get_name()]].query.get(id)
+    if not [[entity.get_name_delimited()]]:
+        add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.get_name_delimited())]]"))
+        return redirect(url_for("[[entity.get_name_delimited()]]_index"))
+
+    return render_template("[[entity.get_name_delimited()]]/show.html", [[entity.get_name_delimited()]]=[[entity.get_name_delimited()]])
+
 @permission('[[entity.get_name_delimited()]]_create')
 def new():
     return render_template("[[entity.get_name_delimited()]]/new.html", form=[[entity.get_name()]]Form())
@@ -34,19 +44,20 @@ def edit(id):
         add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.get_name_delimited())]]"))
         return redirect(url_for("[[entity.get_name_delimited()]]_index"))
 
-    return render_template("[[entity.get_name_delimited()]]/edit.html", [[entity.get_name_delimited()]]_id=id, form=[[entity.get_name()]]Form(obj=[[entity.get_name_delimited()]]))
+    return render_template("[[entity.get_name_delimited()]]/edit.html", [[entity.get_name_delimited()]]=[[entity.get_name_delimited()]], form=[[entity.get_name()]]Form(obj=[[entity.get_name_delimited()]]))
 
 @permission('[[entity.get_name_delimited()]]_update')
 def update(id):
-    form = [[entity.get_name()]]Form(id=id)
-    if not form.validate_on_submit():
-        return render_template("[[entity.get_name_delimited()]]/edit.html", [[entity.get_name_delimited()]]_id=id, form=form)
-    [[entity.get_name_delimited()]] = [[entity.get_name()]].update(id, [[entity.get__list_args_resource()]])
+    [[entity.get_name_delimited()]] = [[entity.get_name()]].get(id)
     if not [[entity.get_name_delimited()]]:
         add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.get_name_delimited())]]"))
         return redirect(url_for("[[entity.get_name_delimited()]]_index"))
+    form = [[entity.get_name()]]Form(id=id)
+    if not form.validate_on_submit():
+        return render_template("[[entity.get_name_delimited()]]/edit.html", [[entity.get_name_delimited()]]=[[entity.get_name_delimited()]], form=form)
+    [[entity.get_name_delimited()]].update([[entity.get__list_args_resource()]])
     add_alert(
-        Alert("success", "[[ main_json["message"]["modified"].format(entity.get_name_delimited())]]")
+        Alert("success", "[[ main_json["message"]["modified"].format(entity.get_name_delimited())]]"))
     return redirect(url_for("[[entity.get_name_delimited()]]_index"))
 
 @permission('[[entity.get_name_delimited()]]_delete')

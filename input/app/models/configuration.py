@@ -5,15 +5,10 @@ from app.db import db
 
 class Configuration(db.Model):
 
-    __tablename__ = 'configuration'
-
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(30), nullable=False, default="")
-    description = db.Column(db.String(160), nullable=False, default="")
     contact_email = db.Column(
         db.String(30), unique=True, nullable=False, default="")
-    pagination_elements = db.Column(db.Integer, nullable=False, default=10)
-    enabled_site = db.Column(db.Boolean, nullable=False, default=True)
+    items_per_page = db.Column(db.Integer, nullable=False, default=10)
 
     def __repr__(self):
         return f'<Configuration {self.title}>'

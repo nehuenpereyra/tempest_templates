@@ -1,4 +1,4 @@
-from .TranslateForm import TranslateForm
+from .translate_form import TranslateForm
 from wtforms import SubmitField
 [[entity.get_import_list_for_unique()]]
 [[entity.get_import_list_for_form()]]

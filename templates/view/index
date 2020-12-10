@@ -1,5 +1,10 @@
 [% extends "view/layout" %]
+
+[% block import %]
 {% from 'macros/alert.html' import  show_alert %}
+[% endblock %]
+
+[% block title %][[ entity.label ]][% endblock %]
 
 [% block content %]
     
@@ -15,9 +20,9 @@
         </a>
     </div>
     
-    {% if[[entity.get_name_delimited()]].items %}
+    {% if [[entity.get_name_plural_delimited()]].items %}
         <ul class="list-group border rounded shadow-sm mt-3">
-            {% for [[entity.get_name_delimited()]] in [[entity.get_name_delimited()]].items %}
+            {% for [[entity.get_name_delimited()]] in [[entity.get_name_plural_delimited()]].items %}
                 <li class="list-group-item">
                     <div class="row d-flex">
                         <div class="col-12 d-flex justify-content-center justify-content-sm-start col-sm mb-2 mb-sm-0">
@@ -49,9 +54,9 @@
 
     <nav class="d-flex justify-content-center justify-content-sm-end mt-3">
         <ul class="pagination">
-            {%- for page in [[entity.get_name_delimited()]].iter_pages() %}
+            {%- for page in [[entity.get_name_plural_delimited()]].iter_pages() %}
                 {% if page %}
-                    {% if page != [[entity.get_name_delimited()]].page %}
+                    {% if page != [[entity.get_name_plural_delimited()]].page %}
                         <li class="page-item">
                             <a class="page-link" href="{{ url_for_page('[[entity.get_name_delimited()]]_index', page) }}">{{ page }}</a>
                         </li>
