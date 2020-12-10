@@ -1,11 +1,12 @@
 
 class Attribute:
 
-    def __init__(self, name, label, default, searchable):
+    def __init__(self, name, label, default, searchable, is_main):
         self.name = name
         self.label = label
         self.default = default
         self.searchable = searchable
+        self.is_main = is_main
         self.type = None
         self.validations = None
 

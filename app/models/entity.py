@@ -3,8 +3,9 @@ import re
 
 class Entity:
 
-    def __init__(self, name, order):
+    def __init__(self, name, label, order):
         self.name = name
+        self.label = label
         self.order = order
         self.attributes = []
 
@@ -25,6 +26,9 @@ class Entity:
         if name[-1] == "y":
             return name[:-1] + "ies"
         return name + "s"
+
+    def get_main_attribute(self):
+        return self.attributes.detect(lambda each: each.is_main, None)
 
     def add_attribute(self, attribute):
         self.attributes.add(attribute)

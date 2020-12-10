@@ -24,6 +24,7 @@ def run():
     generate_model(main_json, entities)
     generate_form(main_json, entities)
     generate_routes(main_json, entities)
+    generate_views(main_json, entities)
 
     # print("\n\n".join(builder.build().collect(lambda each: str(each))))
 
@@ -114,3 +115,30 @@ def generate_routes(main_json, entities):
         os.path.join(routes_path, each.get_name_delimited() + ".py"),
         render_template("routes", entity=each)
     ))
+
+
+def generate_view_for(main_json, entity, path):
+
+    entity_path = os.path.join(path, entity.get_name_delimited())
+
+    os.mkdir(entity_path)
+
+    ["show"].do(lambda each: write_file(
+        os.path.join(entity_path, f"{each}.html"),
+        render_template(
+            f"view/{each}",
+            entity=entity,
+            extends=main_json["view"]["extends"],
+            main_block=main_json["view"]["main_block"]
+        )
+    ))
+
+
+def generate_views(main_json, entities):
+
+    views_path = os.path.join(main_json["output"]["root"],
+                              main_json["output"]["templates"])
+
+    os.mkdir(views_path)
+
+    entities.do(lambda each: generate_view_for(main_json, each, views_path))

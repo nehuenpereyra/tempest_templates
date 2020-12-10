@@ -1,0 +1,24 @@
+
+[% macro show_attribute(attribute) %]
+
+
+        show_field([[ attribute.entity.get_delimited_name() ]].[[ attribute.name ]][% if attribute.type.is_relationship() %], list=True, attribute_label="[[ attribute.type.attribute_presented ]]"[% endif %], required=[[ attribute.validations[0].is_required ]])
+
+
+
+    [% if not attribute.is_relationship() %]
+        show_field([[ attribute.entity.get_delimited_name() ]].[[ attribute.name ]], required=[[ attribute.validations[0].is_required ]])
+    [% else %]
+        {% if [[ attribute.entity.get_delimited_name() ]].[[ attribute.name ]] is not None %}
+            {% if [[ attribute.entity.get_delimited_name() ]].[[ attribute.name ]] %}
+                {% for each in [[ attribute.entity.get_delimited_name() ]].[[ attribute.name ]] %}
+                    show_list_field(each.[[ attribute.type.attribute_presented ]])
+                {% endfor %}
+            {% else%}
+                {{ show_empty_attribute_message() }}
+            {% endif%}
+        {% else%}
+            {{ show_null_attribute_message() }}
+        {% endif%}
+    [% endif %]
+[% endmacro %]

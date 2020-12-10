@@ -13,7 +13,11 @@ class EntityBuilder:
         self.entities = dict()
 
     def add_entity(self, entity_json):
-        entity = Entity(name=entity_json["name"], order=len(self.entities))
+        entity = Entity(
+            name=entity_json["name"],
+            label=entity_json["label"],
+            order=len(self.entities)
+        )
         self.entities[entity.name] = entity
 
         for attribute_json in entity_json["attributes"]:
@@ -21,7 +25,8 @@ class EntityBuilder:
                 name=attribute_json["name"],
                 label=attribute_json["label"],
                 default=attribute_json.get("default", None),
-                searchable=attribute_json.get("searchable", False)
+                searchable=attribute_json.get("searchable", False),
+                is_main=attribute_json.get("is_main", False)
             )
             entity.add_attribute(attribute)
 
@@ -57,6 +62,9 @@ class EntityBuilder:
                                                      *validation_part[1:]))
 
             attribute.validations = validations
+
+        if (entity.attributes.all_satisfy(lambda each: not each.is_main)):
+            entity.attributes.first().is_main = True
 
     def get_entity(self, entity_name):
         return self.entities.get(entity_name, None)
