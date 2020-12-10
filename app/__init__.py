@@ -120,13 +120,14 @@ def generate_view_for(main_json, entity, path):
 
     os.mkdir(entity_path)
 
-    ["show"].do(lambda each: write_file(
+    ["show", "index", "new", "edit"].do(lambda each: write_file(
         os.path.join(entity_path, f"{each}.html"),
         render_template(
             f"view/{each}",
             entity=entity,
             extends=main_json["view"]["extends"],
-            main_block=main_json["view"]["main_block"]
+            main_block=main_json["view"]["main_block"],
+            messages=main_json["message"],
         )
     ))
 

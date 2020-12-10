@@ -1,0 +1,18 @@
+[% extends "view/layout" %]
+
+[% block title %] Editar [[ entity.label ]] [% endblock %]
+
+[% block content %]
+  <h4 class="text-left mt-3">Editar [[ entity.label ]]</h4>
+        <div class="shadow-sm mt-3 p-3">
+            <form class="text-left user" action="{{ url_for('[[entity.get_name_delimited()]]_update', id=[[entity.get_name_delimited()]].id) }}" method="post" >
+                {{ form.hidden_tag() }}
+    [% for attribute in entity.attributes %]
+            <div class="form-group">
+                    {{ input(form.[[ attribute.name ]]) }}
+                </div>
+    [% endfor %]
+            {{ form.submit(class_="btn btn-primary btn-block text-white") }}
+            </form>
+        </div>
+[% endblock %]
