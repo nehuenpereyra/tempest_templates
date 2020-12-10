@@ -1,4 +1,7 @@
+
 import re
+
+from app.models.types import IntegerType
 
 
 class Entity:
@@ -65,16 +68,18 @@ class Entity:
 
     def get_import_list_for_form(self):
         paths = {}
+        paths[IntegerType(None).to_from()] = [IntegerType(None).to_form()]
         import_list = ""
         for attribute in self.attributes:
             if not attribute.type.to_from() in paths:
                 paths[attribute.type.to_from()] = []
-            paths[attribute.type.to_from()].add(attribute.type.to_form())
+            if not paths[attribute.type.to_from()].includes(attribute.type.to_form()):
+                paths[attribute.type.to_from()].add(attribute.type.to_form())
 
         for key, value in paths.items():
             import_list = import_list + "\n" + 'from {} import {}'.format(
                 key,
-                value.inject(lambda each, result: f"{result}, {each}", "")[1:]
+                value.inject(lambda each, result: f"{result}, {each}", "")[2:]
             )
         return import_list
 
@@ -92,10 +97,9 @@ class Entity:
         for key, value in paths.items():
             import_list = import_list + "\n" + 'from {} import {}'.format(
                 key,
-                value.inject(lambda each, result: f"{result}, {each}", "")[1:]
+                value.inject(lambda each, result: f"{result}, {each}", "")[2:]
             )
         return import_list
-    
+
     def get__list_args_resource(self):
-        return ", ".join(self.attributes.collect(lambda each:f"{each.name} = form.{each.name}.data"))
-       
+        return ", ".join(self.attributes.collect(lambda each: f"{each.name} = form.{each.name}.data"))

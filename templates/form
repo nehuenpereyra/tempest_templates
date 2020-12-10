@@ -6,6 +6,7 @@ from wtforms import SubmitField
 
 class [[entity.get_name()]]Form(TranslateForm):
 
+    id = IntegerField()
     [% for attribute in entity.attributes %]
 [[ attribute.to_form() ]]
     [% endfor %]

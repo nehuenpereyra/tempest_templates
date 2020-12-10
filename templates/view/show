@@ -7,7 +7,7 @@
     <h4 class="mt-3">Información de [[ entity.label ]]</h4>
 
     <div class="d-flex justify-content-end mt-3">
-        {% if verify_permission('[[ entity.get_name_delimited() ]]_delete') %}
+        {% if verify_permission('[[ entity.get_name_delimited() ]]_update') %}
             <a class="btn btn-primary btn-sm mr-1" role="button" href="{{ url_for('[[ entity.get_name_delimited() ]]_edit', id=[[ entity.get_name_delimited() ]].id) }}">
                 <i class="fas fa-cog"></i>
             </a>
