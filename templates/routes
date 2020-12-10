@@ -1,0 +1,13 @@
+
+from app.resources import [[ entity.get_name_delimited() ]]
+
+def set_routes(app):
+
+    app.add_url_rule("/[[ entity.get_name_plural_delimited() ]]", "[[ entity.get_name_delimited() ]]_index", [[ entity.get_name_delimited() ]].index)
+    app.add_url_rule("/[[ entity.get_name_delimited() ]]/show/<int:id>", "[[ entity.get_name_delimited() ]]_show", [[ entity.get_name_delimited() ]].show)
+    app.add_url_rule("/[[ entity.get_name_delimited() ]]/new", "[[ entity.get_name_delimited() ]]_new", [[ entity.get_name_delimited() ]].new)
+    app.add_url_rule("/[[ entity.get_name_delimited() ]]/create", "[[ entity.get_name_delimited() ]]_create", [[ entity.get_name_delimited() ]].create, methods=["POST"])
+    app.add_url_rule("/[[ entity.get_name_delimited() ]]/edit/<int:id>", "[[ entity.get_name_delimited() ]]_edit", [[ entity.get_name_delimited() ]].edit)
+    app.add_url_rule("/[[ entity.get_name_delimited() ]]/update/<int:id>", "[[ entity.get_name_delimited() ]]_update", [[ entity.get_name_delimited() ]].update, methods=["POST"])
+    app.add_url_rule("/[[ entity.get_name_delimited() ]]/delete/<int:id>", "[[ entity.get_name_delimited() ]]_delete", [[ entity.get_name_delimited() ]].delete)
+

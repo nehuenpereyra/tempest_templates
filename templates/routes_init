@@ -1,0 +1,11 @@
+
+[% for module in modules %]
+from . import [[ module ]]
+[% endfor %]
+
+
+def set_routes(app):
+    
+[% for module in modules %]
+    [[ module ]].set_routes(app)
+[% endfor %]

@@ -23,6 +23,7 @@ def run():
 
     generate_model(main_json, entities)
     generate_form(main_json, entities)
+    generate_routes(main_json, entities)
 
     # print("\n\n".join(builder.build().collect(lambda each: str(each))))
 
@@ -85,11 +86,31 @@ def generate_model(main_json, entities):
 def generate_form(main_json, entities):
 
     form_path = os.path.join(main_json["output"]["root"],
-                              main_json["output"]["forms"])
+                             main_json["output"]["forms"])
 
     os.mkdir(form_path)
 
     entities.do(lambda each: write_file(
         os.path.join(form_path, each.get_name_delimited() + ".py"),
         render_template("form", entity=each)
+    ))
+
+
+def generate_routes(main_json, entities):
+
+    routes_path = os.path.join(main_json["output"]["root"],
+                               main_json["output"]["routes"])
+
+    os.mkdir(routes_path)
+
+    write_file(
+        os.path.join(routes_path, "__init__.py"),
+        render_template("routes_init", modules=entities.collect(
+            lambda each: each.get_name_delimited()
+        ))
+    )
+
+    entities.do(lambda each: write_file(
+        os.path.join(routes_path, each.get_name_delimited() + ".py"),
+        render_template("routes", entity=each)
     ))
