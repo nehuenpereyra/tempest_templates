@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <div id="wrapper">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion p-0" style="/*background-color: #7eb5b8;*/background: linear-gradient(45deg, #3a6ba6, #7eb5b8);">
+            <div class="container-fluid d-flex flex-column p-0">
+                <ul class="nav navbar-nav text-light" id="accordionSidebar">
+                    {% if verify_permission('user_index') %}
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="{{ url_for('user_index') }}"><i class="fas fa-user"></i><span>Usuarios</span></a></li>
+                    {% endif %}
+                    {% if verify_permission('help_center_index') %}
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="{{ url_for('help_center_index') }}"><i class="fas fa-building"></i><span>Centros</span></a></li>
+                    {% endif %}
+                    {% if verify_permission('turn_index') %}
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="{{ url_for('turn_index') }}"><i class="far fa-calendar-check"></i><span>Turnos</span></a></li>
+                    {% endif %}
+                    {% if verify_permission('configuration_update') %}
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="{{ url_for('configuration_edit') }}"><i class="fas fa-tools"></i><span>Configuración</span></a></li>
+                    {% endif %}
+                </ul>
+                <div class="text-center d-none d-md-inline">
+                  <!--<button class="btn rounded-circle border-0" id="sidebarToggle" type="button" ></i></button> -->
+                </div>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content2">
+                <div class="container">
+                    {% block sub_content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}

@@ -1,0 +1,23 @@
+
+{% extends "help_center/layout_form.html" %}
+
+{% block title %}Actualizar Centro de Ayuda{% endblock %}
+
+{% block form_title %}Actualizar Centro de Ayuda{% endblock %}
+
+{% block form_action %}{{ url_for("help_center_update", id=form.id.data) }}{% endblock %}
+
+{% block form_data %}
+
+    {{ super() }}
+
+
+    {% if not help_center.is_in_pending_state() %}
+        <div class="form-check">{{ checkbox_input(form.request_status) }}</div>
+    {% endif %}
+
+    {% if help_center.has_view_protocol %}
+        <div class="form-check">{{ checkbox_input(form.delete_view_protocol) }}</div>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "authorized_layout.html" %}
+
+{% macro input(field, placeholder) %} 
+    {{ field.label }} 
+  {% if ( field.errors|length == 0) %}
+    {{ field(class_="form-control",placeholder=placeholder) }}
+  {% else %}
+    {{ field(class_="form-control is-invalid",placeholder=placeholder) }}
+    {% for error in field.errors %}
+      <div class="invalid-feedback">{{ error }}</div>
+    {% endfor %}
+  {% endif %}
+{% endmacro %}
+
+{% block title %}Modificar Turno{% endblock %}
+
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block sub_content %}
+
+    <h4 class="text-left mt-3"> 
+        {% if id_turn != None %}
+            Editar turno del {{name_center}}
+        {% else %}
+          Solicitar turno del {{name_center}}
+        {% endif %} 
+    </h4>
+        <div class="shadow-sm mt-3 p-3">
+            <form class="text-left user" action="{{ url_for('turn_edit', id=id_center , id_turn=id_turn) }}" method="post" id="new_form" >
+              {{ form.csrf_token }}
+                <div class="form-group row">
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        {{input(form.email, "Correo Electrónico")}}
+                    </div>
+                    <div class="col-sm-6">
+                        {{input(form.donor_phone_number, "telefono donante")}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.day_hour.label }} 
+                    {% if ( form.day_hour.errors|length == 0) %}
+                        {{ form.day_hour(class_="form-control", step="60") }}
+                    {% else %}
+                        {{ form.day_hour(class_="form-control is-invalid", placeholder="Horario del turno a solicitar", step="60") }}
+                        {% for error in form.day_hour.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                        
+                </div>
+                {{ form.submit(class_="btn btn-primary btn-block text-white") }}
+                
+            </form>
+        </div>
+            
+
+{% endblock %}
+

@@ -1,0 +1,86 @@
+{% from 'macros/alert.html' import  show_alert %}
+{% extends "authorized_layout.html" %}
+
+{% macro show_field(field, true_message=field, false_message=None, none_message=None) %}
+    {% if field == None %}
+        {{ none_message }}
+    {% elif not field %}
+        {{ false_message }}
+    {% else %}
+        {{ true_message }}
+    {% endif %}
+{% endmacro %}
+
+
+{% macro show_optional_field(field, true_message=field, false_message=None, none_message="No cargado") %}
+    {{ show_field(field, true_message, false_message, none_message) }}
+{% endmacro %}
+
+{% block title %}Centro de Ayuda - {{ help_center.name }}{% endblock %}
+
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block sub_content %}
+
+    {% if alert %}
+        {{ show_alert(alert) }}
+    {% endif %}
+
+    <h4 class="mt-3">Información de Centro</h4>
+    {% if help_center.is_in_pending_state() %}
+    <div class="d-flex justify-content-end mt-3">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <a class="btn btn-sm btn-outline-danger" href="{{ url_for('help_center_reject', id=help_center.id) }}">Rechazar</a>
+            <a class="btn btn-sm btn-outline-primary" href="{{ url_for('help_center_accept', id=help_center.id) }}">Aceptar</a>
+        </div>
+    </div>
+    {% endif %}
+
+    <ul class="list-group shadow-sm my-4 mx-2">
+        <li class="list-group-item">
+            <h6 class="mb-0">Nombre</h6><small class="ml-2">{{ help_center.name }}</small></li>
+        <li class="list-group-item">
+            <h6 class="mb-0">Dirección</h6><small class="ml-2">{{ help_center.address }}</small></li>
+        <li class="list-group-item">
+            <h6 class="mb-0">Telefono</h6><small class="ml-2">{{ help_center.phone_number }}</small></li>
+        <li class="list-group-item">
+            <h6 class="mb-0">Hora de apertura</h6><small class="ml-2">{{ help_center.opening_time.strftime("%H:%Mhs") }}</small></li>
+        <li class="list-group-item">
+            <h6 class="mb-0">Hora de cierre</h6><small class="ml-2">{{ help_center.closing_time.strftime("%H:%Mhs") }}</small></li>
+        <li class="list-group-item">
+            <h6 class="mb-0">Tipo de centro</h6><small class="ml-2">{{ help_center.center_type.name }}</small></li>
+        <li class="list-group-item">
+            <h6 class="mb-0">Municipio</h6><small class="ml-2">{{ help_center.town.name }}</small></li>
+        <li class="list-group-item">
+            <h6 class="mb-0">Sitio web</h6><small class="ml-2">{{ show_optional_field(help_center.web_url) }}</small></li>
+        <li class="list-group-item">
+            <h6 class="mb-0">Correo electronico</h6><small class="ml-2">{{ show_optional_field(help_center.email) }}</small></li>
+        <li class="list-group-item">
+            <h6 class="mb-0">Protocolo de vista</h6>
+            <small class="ml-2">
+                {% if help_center.has_view_protocol %}
+                    <a href="{{ url_for('static', filename=view_protocol_filename) }}">Protocolo</a>
+                {% else %}
+                    No cargado
+                {% endif %}
+            </small>
+        </li>
+        <li class="list-group-item">
+            <h6 class="mb-0">Latitud</h6><small class="ml-2">{{ show_optional_field(help_center.latitude) }}</small></li>
+        <li class="list-group-item">
+            <h6 class="mb-0">Longitud</h6><small class="ml-2">{{ show_optional_field(help_center.longitude) }}</small></li>
+        <li class="list-group-item">
+            <h6 class="mb-0">Publicado</h6>
+            <small class="ml-2">{{ show_field(help_center.published, true_message="Si", false_message="No") }}</small>
+        </li>
+        <li class="list-group-item">
+            <h6 class="mb-0">Estado de solicitud</h6>
+            <small class="ml-2">
+                {{ show_field(help_center.request_status, true_message="Aceptado", false_message="Rechazado", none_message="Pendiente") }}
+            </small>
+        </li>
+    </ul>
+
+{% endblock %}
