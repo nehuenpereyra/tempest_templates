@@ -95,3 +95,7 @@ class Entity:
                 value.inject(lambda each, result: f"{result}, {each}", "")[1:]
             )
         return import_list
+    
+    def get__list_args_resource(self):
+        return ", ".join(self.attributes.collect(lambda each:f"{each.name} = form.{each.name}.data"))
+       

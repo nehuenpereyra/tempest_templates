@@ -25,8 +25,7 @@ def run():
     generate_form(main_json, entities)
     generate_routes(main_json, entities)
     generate_views(main_json, entities)
-
-    # print("\n\n".join(builder.build().collect(lambda each: str(each))))
+    generate_resourse(main_json, entities)
 
 
 def generate_model(main_json, entities):
@@ -80,8 +79,6 @@ def generate_model(main_json, entities):
                 secondary_entity_name=each.type.linked_attribute.entity.get_name_delimited()
             )
         ))
-
-    # print(render_template("example", value="user.name"))
 
 
 def generate_form(main_json, entities):
@@ -142,3 +139,16 @@ def generate_views(main_json, entities):
     os.mkdir(views_path)
 
     entities.do(lambda each: generate_view_for(main_json, each, views_path))
+
+
+def generate_resourse(main_json, entities):
+
+    resource_path = os.path.join(main_json["output"]["root"],
+                                 main_json["output"]["resources"])
+
+    os.mkdir(resource_path)
+
+    entities.do(lambda each: write_file(
+        os.path.join(resource_path, each.get_name_delimited() + ".py"),
+        render_template("resource", entity=each, main_json=main_json)
+    ))
