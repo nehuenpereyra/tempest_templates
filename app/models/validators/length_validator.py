@@ -13,3 +13,9 @@ class LengthValidator(Validator):
 
     def to_form(self):
         return f"Length(min={self.min}, max={self.max})"
+
+    def to_from(self):
+        return "wtforms.validators"
+    
+    def to_import(self):
+        return "Length"

@@ -1,0 +1,13 @@
+from .TranslateForm import TranslateForm
+from wtforms import SubmitField
+[[entity.get_import_list_for_unique()]]
+[[entity.get_import_list_for_form()]]
+[[entity.get_import_list_for_validations()]]
+
+class [[entity.get_name()]]Form(TranslateForm):
+
+    [% for attribute in entity.attributes %]
+[[ attribute.to_form() ]]
+    [% endfor %]
+submit = SubmitField('Enviar')
+

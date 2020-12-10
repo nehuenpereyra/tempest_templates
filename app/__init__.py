@@ -22,6 +22,7 @@ def run():
     os.mkdir(main_json["output"]["root"])
 
     generate_model(main_json, entities)
+    generate_form(main_json, entities)
 
     # print("\n\n".join(builder.build().collect(lambda each: str(each))))
 
@@ -79,3 +80,16 @@ def generate_model(main_json, entities):
         ))
 
     # print(render_template("example", value="user.name"))
+
+
+def generate_form(main_json, entities):
+
+    form_path = os.path.join(main_json["output"]["root"],
+                              main_json["output"]["forms"])
+
+    os.mkdir(form_path)
+
+    entities.do(lambda each: write_file(
+        os.path.join(form_path, each.get_name_delimited() + ".py"),
+        render_template("form", entity=each)
+    ))

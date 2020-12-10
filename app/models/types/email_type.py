@@ -16,3 +16,9 @@ class EmailType(StringType):
 
     def get_validations(self):
         return [EmailValidator(self.attribute)]
+    
+    def to_from(self):
+        return "wtforms.fields.html5"
+    
+    def to_import(self):
+        return "EmailField"

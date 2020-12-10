@@ -50,3 +50,12 @@ class Attribute:
                     )
 
         return result
+
+    def to_form(self):
+        return '{} = {}("{}", validators=[{}])'.format(
+            self.name,
+            self.type.to_form(),
+            self.label,
+            self.validations.select(lambda each: each.to_form())
+            .inject(lambda each, result: f"{result}, {each.to_form()}", "")[1:]
+        )

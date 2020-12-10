@@ -80,3 +80,16 @@ class RelationshipType(Type):
             linked_entity.get_name_delimited() if own_entity.order < linked_entity.order
             else own_entity.get_name_delimited()
         )
+
+    def to_form(self):
+        if self.cardinality == "one":
+            return "SelectField"
+        return "SelectMultipleField"
+
+    def to_from(self):
+        return "wtforms"
+
+    def to_import(self):
+        if self.cardinality == "one":
+            return "SelectField"
+        return "SelectMultipleField"

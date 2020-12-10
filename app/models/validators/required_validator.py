@@ -19,3 +19,12 @@ class RequiredValidator(Validator):
 
     def to_model(self):
         return f"nullable={not self.is_required}"
+    
+    def to_from(self):
+        return "wtforms.validators"
+    
+    def to_import(self):
+        if self.is_required:
+            return "DataRequired"
+        return "Optional"
+        
