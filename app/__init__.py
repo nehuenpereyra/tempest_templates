@@ -16,11 +16,7 @@ def run():
 
     entities = builder.build()
 
-    if os.path.exists(main_json["output"]["root"]):
-        shutil.rmtree(main_json["output"]["root"])
-
-    os.mkdir(main_json["output"]["root"])
-
+    generate_structure(main_json)
     generate_model(main_json, entities)
     generate_form(main_json, entities)
     generate_routes(main_json, entities)
@@ -28,12 +24,26 @@ def run():
     generate_resourse(main_json, entities)
 
 
+def generate_structure(main_json):
+
+    input_folder = main_json.get("input", None)
+    output_folder = main_json["output"]["root"]
+
+    if os.path.exists(output_folder):
+        shutil.rmtree(output_folder)
+
+    if input_folder:
+        shutil.copytree(input_folder, output_folder)
+    else:
+        os.makedirs(output_folder, exist_ok=True)
+
+
 def generate_model(main_json, entities):
 
     model_path = os.path.join(main_json["output"]["root"],
                               main_json["output"]["models"])
 
-    os.mkdir(model_path)
+    os.makedirs(model_path, exist_ok=True)
 
     write_file(
         os.path.join(model_path, "__init__.py"),
@@ -48,7 +58,7 @@ def generate_model(main_json, entities):
     if entities.any_satisfy(lambda each: each.has_relationship_of_many_to_many()):
         database_links_path = os.path.join(model_path, "database_links")
 
-        os.mkdir(database_links_path)
+        os.makedirs(database_links_path, exist_ok=True)
 
         relationship_attributes = []
         all_relationship_attributes = entities.flat_collect(
@@ -86,7 +96,7 @@ def generate_form(main_json, entities):
     form_path = os.path.join(main_json["output"]["root"],
                              main_json["output"]["forms"])
 
-    os.mkdir(form_path)
+    os.makedirs(form_path, exist_ok=True)
 
     entities.do(lambda each: write_file(
         os.path.join(form_path, each.get_name_delimited() + ".py"),
@@ -99,7 +109,7 @@ def generate_routes(main_json, entities):
     routes_path = os.path.join(main_json["output"]["root"],
                                main_json["output"]["routes"])
 
-    os.mkdir(routes_path)
+    os.makedirs(routes_path, exist_ok=True)
 
     write_file(
         os.path.join(routes_path, "__init__.py"),
@@ -118,7 +128,7 @@ def generate_view_for(main_json, entity, path):
 
     entity_path = os.path.join(path, entity.get_name_delimited())
 
-    os.mkdir(entity_path)
+    os.makedirs(entity_path, exist_ok=True)
 
     ["show"].do(lambda each: write_file(
         os.path.join(entity_path, f"{each}.html"),
@@ -136,7 +146,7 @@ def generate_views(main_json, entities):
     views_path = os.path.join(main_json["output"]["root"],
                               main_json["output"]["templates"])
 
-    os.mkdir(views_path)
+    os.makedirs(views_path, exist_ok=True)
 
     entities.do(lambda each: generate_view_for(main_json, each, views_path))
 
@@ -146,7 +156,7 @@ def generate_resourse(main_json, entities):
     resource_path = os.path.join(main_json["output"]["root"],
                                  main_json["output"]["resources"])
 
-    os.mkdir(resource_path)
+    os.makedirs(resource_path, exist_ok=True)
 
     entities.do(lambda each: write_file(
         os.path.join(resource_path, each.get_name_delimited() + ".py"),
