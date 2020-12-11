@@ -1,5 +1,9 @@
 [% extends "view/layout" %]
 
+[% block import %]
+{% from 'macros/input.html' import  input %}
+[% endblock %]
+
 [% block title %] Editar [[ entity.label ]] [% endblock %]
 
 [% block content %]
