@@ -17,7 +17,7 @@ def index():
 def show(id):
     [[entity.get_name_delimited()]] = [[entity.get_name()]].query.get(id)
     if not [[entity.get_name_delimited()]]:
-        add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.get_name_delimited())]]"))
+        add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.label.lower())]]"))
         return redirect(url_for("[[entity.get_name_delimited()]]_index"))
 
     return render_template("[[entity.get_name_delimited()]]/show.html", [[entity.get_name_delimited()]]=[[entity.get_name_delimited()]])
@@ -33,7 +33,7 @@ def create():
         [[entity.get_name_delimited()]] = [[entity.get_name()]]([[entity.get__list_args_resource()]])
         [[entity.get_name_delimited()]].save()
         add_alert(
-            Alert("success", "[[ main_json["message"]["create"].format(entity.get_name_delimited())]]"))
+            Alert("success", "[[ main_json["message"]["create"].format("{{{{{}.{}}}}}".format(entity.get_name_delimited(),entity.get_main_attribute().name))]]"))
         return redirect(url_for("[[entity.get_name_delimited()]]_index"))
     return render_template("[[entity.get_name_delimited()]]/new.html", form=form)
 
@@ -41,7 +41,7 @@ def create():
 def edit(id):
     [[entity.get_name_delimited()]] = [[entity.get_name()]].query.get(id)
     if not [[entity.get_name_delimited()]]:
-        add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.get_name_delimited())]]"))
+        add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.label.lower())]]"))
         return redirect(url_for("[[entity.get_name_delimited()]]_index"))
 
     return render_template("[[entity.get_name_delimited()]]/edit.html", [[entity.get_name_delimited()]]=[[entity.get_name_delimited()]], form=[[entity.get_name()]]Form(obj=[[entity.get_name_delimited()]]))
@@ -50,14 +50,14 @@ def edit(id):
 def update(id):
     [[entity.get_name_delimited()]] = [[entity.get_name()]].get(id)
     if not [[entity.get_name_delimited()]]:
-        add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.get_name_delimited())]]"))
+        add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.label.lower())]]"))
         return redirect(url_for("[[entity.get_name_delimited()]]_index"))
     form = [[entity.get_name()]]Form(id=id)
     if not form.validate_on_submit():
         return render_template("[[entity.get_name_delimited()]]/edit.html", [[entity.get_name_delimited()]]=[[entity.get_name_delimited()]], form=form)
     [[entity.get_name_delimited()]].update([[entity.get__list_args_resource()]])
     add_alert(
-        Alert("success", "[[ main_json["message"]["modified"].format(entity.get_name_delimited())]]"))
+        Alert("success", "[[ main_json["message"]["modified"].format("{{{{{}.{}}}}}".format(entity.get_name_delimited(),entity.get_main_attribute().name))]]"))
     return redirect(url_for("[[entity.get_name_delimited()]]_index"))
 
 @permission('[[entity.get_name_delimited()]]_delete')
@@ -65,7 +65,7 @@ def delete(id):
     [[entity.get_name_delimited()]] = [[entity.get_name()]].delete(id)
     if [[entity.get_name_delimited()]]:
         add_alert(
-            Alert("success", "[[ main_json["message"]["deleted"].format(entity.get_name_delimited())]]"))
+            Alert("success", "[[ main_json["message"]["deleted"].format("{{{{{}.{}}}}}".format(entity.get_name_delimited(),entity.get_main_attribute().name))]]"))
     else:
-        add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.get_name_delimited())]]"))
+        add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.label.lower())]]"))
     return redirect(url_for("[[entity.get_name_delimited()]]_index"))
