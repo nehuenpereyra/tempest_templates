@@ -1,3 +1,5 @@
+from app.models.types import BooleanType
+
 
 class Attribute:
 
@@ -77,10 +79,15 @@ class Attribute:
         return self.type.get_model_arguments()
 
     def get_form_arguments(self):
-        result = self.type.get_form_arguments()
-        if not self.is_required():
-            result["filters"] = "[lambda value: value or None]"
-        if self.entity.get_loadable_attributes().first() is self:
-            result["render_kw"] = {"autofocus": True}
 
-        return result
+        arguments = self.type.get_form_arguments()
+
+        if not self.is_required():
+            arguments["filters"] = "[lambda value: value or None]"
+        if self.entity.get_loadable_attributes().first() is self:
+            arguments["render_kw"] = {"autofocus": True}
+        if self.default != None or type(self.type) == BooleanType:
+            arguments["default"] = (
+                "False" if self.default == None else f"{self.default}")
+
+        return arguments

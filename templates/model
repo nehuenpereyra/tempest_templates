@@ -58,7 +58,7 @@ class [[entity.get_name()]](db.Model):
 [% for attribute in entity.attributes %][% if attribute.searchable %]
     @staticmethod
     def find_by_[[ attribute.name ]]([[ attribute.name ]]):
-        query = [[ entity.get_name() ]].query.order_by([[ entity.get_name() ]].[[ entity.get_main_attribute().name]].asc())
+        query = [[ entity.get_name() ]].query.order_by([[ attribute.type.get_order_query_for_model() ]].asc())
         return query.filter_by([[ attribute.name ]]=[[ attribute.name ]])
 
 [% endif %][% endfor %]

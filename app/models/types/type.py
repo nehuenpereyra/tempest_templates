@@ -24,3 +24,6 @@ class Type:
 
     def get_form_arguments(self):
         return {}
+    
+    def get_order_query_for_model(self):
+        return f"{self.attribute.entity.get_name()}.{self.attribute.entity.get_main_attribute().name}"

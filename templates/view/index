@@ -12,7 +12,7 @@
         {{ show_alert(alert) }}
     {% endif %}
     
-    <h4 class="mt-3">[[entity.label]]</h4>
+    <h5 class="mt-3">[[entity.label]]</h5>
     <div class="d-flex justify-content-end mt-3">
         <a class="btn btn-primary btn-sm flex-grow-1 flex-sm-grow-0 h-100" role="button" href="{{ url_for('[[entity.get_name_delimited()]]_new') }}">
             <i class="fas fa-plus"></i>

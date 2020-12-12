@@ -1,7 +1,7 @@
 
 import re
 
-from app.models.types import IntegerType
+from app.models.types import IntegerType, DateTimeType
 
 
 class Entity:
@@ -53,6 +53,8 @@ class Entity:
                 ))
             ))
 
+        #if self.attributes.any_satisfy(lambda each: type(each.type) == DateTimeType):
+        #    import_list.add("\nfrom sqlalchemy import DateTime, cast")
         return import_list
 
     def has_relationship_attributes_for_form(self):
