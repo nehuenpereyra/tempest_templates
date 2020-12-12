@@ -93,3 +93,8 @@ class RelationshipType(Type):
         if self.cardinality == "one":
             return "SelectField"
         return "SelectMultipleField"
+
+    def get_form_arguments(self):
+        return {
+            "coerce": "int"
+        }

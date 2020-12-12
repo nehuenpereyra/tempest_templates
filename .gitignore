@@ -169,10 +169,5 @@ pip-selfcheck.json
 
 # Others
 own
-output
-input/env
-input/app/helpers
-input/app/models
-input/app/resources
-input/app/templates
-input
+output/
+input/

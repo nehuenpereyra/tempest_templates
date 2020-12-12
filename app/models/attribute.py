@@ -54,10 +54,18 @@ class Attribute:
         return result
 
     def to_form(self):
-        return '{} = {}("{}", validators=[{}])'.format(
+        return '{} = {}("{}", validators=[{}]{})'.format(
             self.name,
             self.type.to_form(),
             self.label,
             self.validations.select(lambda each: each.to_form())
-            .inject(lambda each, result: f"{result}, {each.to_form()}", "")[1:]
+            .inject(lambda each, result: f"{result}, {each.to_form()}", "")[1:],
+            list(self.get_form_arguments().items()).inject(
+                lambda each, result: "{}, {}={}".format(
+                    result, each[0], each[1]
+                ), ""
+            )
         )
+
+    def get_form_arguments(self):
+        return self.type.get_form_arguments()

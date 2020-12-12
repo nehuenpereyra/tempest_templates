@@ -134,11 +134,25 @@ class Entity:
         return ", ".join(self.get_loadable_attributes().collect(lambda each: "{} = {}".format(
             each.name,
             f"form.{each.name}.data" if not each.type.is_relationship()
-            else "{}.get(form.{}.data)".format(each.type.linked_attribute.entity.get_name(), each.name)
+            else self.get_resource_relation_argument(each)
         )))
+
+    def get_resource_relation_argument(self, attribute):
+        return "{}.{}(form.{}.data)".format(
+            attribute.type.linked_attribute.entity.get_name(),
+            "get" if attribute.type.has_cardinality_one() else "get_all",
+            attribute.name
+        )
 
     def get_loadable_attributes(self):
         return self.attributes.select(lambda each: each.is_loadable)
 
     def get_names_relationship_attributes(self):
-        return ", ".join(self.attributes.select(lambda each: each.type.is_relationship()).collect(lambda each: each.type.linked_attribute.entity.get_name()))
+        entites_names = self.get_loadable_attributes().select(
+            lambda each: each.type.is_relationship()
+        ).collect(lambda each: each.type.linked_attribute.entity.get_name())
+
+        if entites_names.is_empty():
+            return ""
+
+        return ", " + ", ".join(entites_names)
