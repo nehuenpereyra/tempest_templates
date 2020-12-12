@@ -170,4 +170,4 @@ pip-selfcheck.json
 # Others
 own
 output/
-input/
+input/env

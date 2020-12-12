@@ -1,3 +1,4 @@
+from app.models.types import BooleanType
 
 class Attribute:
 
@@ -68,4 +69,7 @@ class Attribute:
         )
 
     def get_form_arguments(self):
-        return self.type.get_form_arguments()
+        form_arguments = self.type.get_form_arguments()
+        if self.default!=None or type(self.type)==BooleanType:
+            form_arguments["default"] = ("False" if self.default==None else f"{self.default}")
+        return form_arguments
