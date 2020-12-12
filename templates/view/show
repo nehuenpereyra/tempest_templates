@@ -22,7 +22,7 @@
     <ul class="list-group shadow-sm my-4 mx-2">
 [% for attribute in entity.attributes %]
         <li class="list-group-item">
-            <h6[% if not attribute.type.is_relationship() %] class="mb-0"[% endif %]>[[ attribute.label ]]</h6>{{ show_field([[ entity.get_name_delimited() ]].[[ attribute.name ]][% if attribute.type.is_relationship() %], list=True, attribute_label="[[ attribute.type.linked_attribute_presented.name ]]"[% endif %], required=[[ attribute.validations[0].is_required ]]) }}
+            <h6[% if not attribute.type.is_relationship() %] class="mb-0"[% endif %]>[[ attribute.label ]]</h6>{{ show_field([[ entity.get_name_delimited() ]].[[ attribute.name ]][% if attribute.type.is_relationship() %], list=True, attribute_label="[[ attribute.type.linked_attribute_presented.name ]]"[% endif %], required=[[ attribute.validations[0].is_required ]])|safe }}
         </li>
 [% endfor %]
     </ul>
