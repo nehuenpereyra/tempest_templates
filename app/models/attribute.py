@@ -20,6 +20,9 @@ class Attribute:
 
         return f"{self.name}: {self.type} [{validations_string}]"
 
+    def is_required(self):
+        return self.validations[0].is_required
+
     def to_model(self):
         if not self.type.is_relationship():
             result = '{} = db.Column("{}", db.{}{})'.format(
@@ -36,8 +39,11 @@ class Attribute:
                 self.name,
                 linked_attribute.entity.get_name(),
                 linked_attribute.name,
-                f", secondary={self.type.get_import_link()}" if self.type.has_cardinality_many_to_many(
-                ) else ""
+                list(self.get_model_arguments().items()).inject(
+                    lambda each, result: "{}, {}={}".format(
+                        result, each[0], each[1]
+                    ), ""
+                )
             )
 
             if self.type.has_cardinality_one():
@@ -67,5 +73,14 @@ class Attribute:
             )
         )
 
+    def get_model_arguments(self):
+        return self.type.get_model_arguments()
+
     def get_form_arguments(self):
-        return self.type.get_form_arguments()
+        result = self.type.get_form_arguments()
+        if not self.is_required():
+            result["filters"] = "[lambda value: value or None]"
+        if self.entity.get_loadable_attributes().first() is self:
+            result["render_kw"] = {"autofocus": True}
+
+        return result

@@ -65,6 +65,10 @@ class RelationshipType(Type):
     def has_cardinality_many(self):
         return self.cardinality == "many"
 
+    def has_cardinality_one_to_one(self):
+        return self.has_cardinality_one() and \
+            self.linked_attribute.type.has_cardinality_one()
+
     def has_cardinality_many_to_many(self):
         return self.has_cardinality_many() and \
             self.linked_attribute.type.has_cardinality_many()
@@ -93,6 +97,17 @@ class RelationshipType(Type):
         if self.cardinality == "one":
             return "SelectField"
         return "SelectMultipleField"
+
+    def get_model_arguments(self):
+
+        arguments = super().get_model_arguments()
+
+        if self.has_cardinality_one():
+            arguments["uselist"] = False
+        elif self.has_cardinality_many_to_many():
+            arguments["secondary"] = self.get_import_link()
+
+        return arguments
 
     def get_form_arguments(self):
         return {

@@ -16,6 +16,10 @@ submit = SubmitField('Enviar')
     def __init__(self, *args, **kwargs):
         super([[entity.get_name()]]Form, self).__init__(*args, **kwargs)
 [% for attribute in entity.get_relationship_attributes_for_form() %]
-        self.[[ attribute.name ]].choices = [[ attribute.type.linked_attribute.entity.get_name() ]].all().collect(lambda each: (each.id, each.[[ attribute.type.linked_attribute_presented.name ]]))
+        self.[[ attribute.name ]].choices = [[ attribute.type.linked_attribute.entity.get_name() ]].all() \
+[% if attribute.type.has_cardinality_one_to_one() %]            .select(lambda each: each.[[ attribute.type.linked_attribute.name ]] is None) \
+            .if_(self.id.data[% if not attribute.is_required() %] and [[ entity.get_name() ]].get(self.id.data).[[ attribute.name ]][% endif %], lambda list_: list_.add([[ entity.get_name() ]].get(self.id.data).[[ attribute.name ]]), return_self=True) \
+[% endif %]
+            .collect(lambda each: (each.id, each.[[ attribute.type.linked_attribute_presented.name ]]))
 [% endfor %]
 [% endif %]

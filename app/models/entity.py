@@ -75,7 +75,8 @@ class Entity:
 
         import_list = []
 
-        if self.attributes.any_satisfy(lambda each: each.validations[1].is_unique):
+        if self.get_relationship_attributes_for_form().any_satisfy(lambda each: each.type.has_cardinality_one_to_one()) or \
+                self.attributes.any_satisfy(lambda each: each.validations[1].is_unique):
             import_list.add(self.get_name())
 
         import_list.extend(self.get_relationship_attributes_for_form().collect(
@@ -96,7 +97,7 @@ class Entity:
         paths = {}
         paths[IntegerType(None).to_from()] = [IntegerType(None).to_form()]
         import_list = ""
-        for attribute in self.attributes:
+        for attribute in self.get_loadable_attributes():
             if not attribute.type.to_from() in paths:
                 paths[attribute.type.to_from()] = []
             if not paths[attribute.type.to_from()].includes(attribute.type.to_form()):
