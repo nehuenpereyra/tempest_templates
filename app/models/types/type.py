@@ -18,3 +18,6 @@ class Type:
 
     def get_widget(self):
         pass
+
+    def get_form_arguments(self):
+        return {}

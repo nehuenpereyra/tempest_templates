@@ -51,6 +51,10 @@ class [[entity.get_name()]](db.Model):
     def get(id):
         return [[ entity.get_name() ]].query.get(id)
 
+    @staticmethod
+    def get_all(ids):
+        return [[ entity.get_name() ]].query.filter([[ entity.get_name() ]].id.in_(ids)).all()
+
 [% for attribute in entity.attributes %][% if attribute.searchable %]
     @staticmethod
     def find_by_[[ attribute.name ]]([[ attribute.name ]]):
