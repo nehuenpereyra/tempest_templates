@@ -1,12 +1,13 @@
 
 class Attribute:
 
-    def __init__(self, name, label, default, searchable, is_main):
+    def __init__(self, name, label, default, searchable, is_main, is_loadable):
         self.name = name
         self.label = label
         self.default = default
         self.searchable = searchable
         self.is_main = is_main
+        self.is_loadable = is_loadable
         self.type = None
         self.validations = None
 
@@ -21,7 +22,7 @@ class Attribute:
 
     def to_model(self):
         if not self.type.is_relationship():
-            result = '__{} = db.Column("{}", db.{}{})'.format(
+            result = '{} = db.Column("{}", db.{}{})'.format(
                 self.name,
                 self.name,
                 self.type.to_model(),
@@ -31,7 +32,7 @@ class Attribute:
         else:
             linked_attribute = self.type.linked_attribute
 
-            result = '__{} = db.relationship("{}", back_populates="{}"{})'.format(
+            result = '{} = db.relationship("{}", back_populates="{}"{})'.format(
                 self.name,
                 linked_attribute.entity.get_name(),
                 linked_attribute.name,
@@ -41,7 +42,7 @@ class Attribute:
 
             if self.type.has_cardinality_one():
                 if self.type.has_foreign_key:
-                    result += '\n{}__{} = db.Column("{}", db.Integer, db.ForeignKey("{}.id"){})'.format(
+                    result += '\n{}{} = db.Column("{}", db.Integer, db.ForeignKey("{}.id"){})'.format(
                         " " * 4,
                         f"{self.name}_id",
                         f"{self.name}_id",

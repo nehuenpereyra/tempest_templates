@@ -55,16 +55,42 @@ class Entity:
 
         return import_list
 
+    def has_relationship_attributes_for_form(self):
+        return self.attributes.any_satisfy(
+            lambda each: each.type.is_relationship() and each.is_loadable
+        )
+
     def has_relationship_of_many_to_many(self):
         return self.attributes.any_satisfy(lambda each: each.type.is_relationship() and each.type.has_cardinality_many_to_many())
+
+    def get_relationship_attributes_for_form(self):
+        return self.attributes.select(
+            lambda each: each.type.is_relationship() and each.is_loadable
+        )
 
     def get_many_to_many_relationship_attributes(self):
         return self.attributes.select(lambda each: each.type.is_relationship() and each.type.has_cardinality_many_to_many())
 
-    def get_import_list_for_unique(self):
-        if self.attributes.any_satisfy(lambda each: each.validations[1].is_unique == True):
-            return f"from app.models import {self.name}"
+    def get_model_import_for_form(self):
+
+        import_list = []
+
+        if self.attributes.any_satisfy(lambda each: each.validations[1].is_unique):
+            import_list.add(self.get_name())
+
+        import_list.extend(self.get_relationship_attributes_for_form().collect(
+            lambda each: each.type.linked_attribute.entity.get_name()))
+
+        import_list.remove_duplicated()
+
+        if import_list:
+            return "from app.models import {}".format(", ".join(import_list))
         return ""
+
+    # def get_import_list_for_unique(self):
+    #     if self.attributes.any_satisfy(lambda each: each.validations[1].is_unique):
+    #         return f"from app.models import {self.name}"
+    #     return ""
 
     def get_import_list_for_form(self):
         paths = {}
@@ -101,8 +127,11 @@ class Entity:
             )
         return import_list
 
-    def get_arguments_names_list(self):
-        return self.attributes.collect(lambda each: each.name)
+    def get_list_of_loadable_argument_names(self):
+        return self.get_loadable_attributes().collect(lambda each: each.name)
 
     def get__list_args_resource(self):
-        return ", ".join(self.attributes.collect(lambda each: f"{each.name} = form.{each.name}.data"))
+        return ", ".join(self.get_loadable_attributes().collect(lambda each: f"{each.name} = form.{each.name}.data"))
+
+    def get_loadable_attributes(self):
+        return self.attributes.select(lambda each: each.is_loadable)

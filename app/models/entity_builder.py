@@ -26,7 +26,8 @@ class EntityBuilder:
                 label=attribute_json["label"],
                 default=attribute_json.get("default", None),
                 searchable=attribute_json.get("searchable", False),
-                is_main=attribute_json.get("is_main", False)
+                is_main=attribute_json.get("is_main", False),
+                is_loadable=attribute_json.get("is_loadable", True)
             )
             entity.add_attribute(attribute)
 
