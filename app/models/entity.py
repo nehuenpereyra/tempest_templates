@@ -131,7 +131,14 @@ class Entity:
         return self.get_loadable_attributes().collect(lambda each: each.name)
 
     def get__list_args_resource(self):
-        return ", ".join(self.get_loadable_attributes().collect(lambda each: f"{each.name} = form.{each.name}.data"))
+        return ", ".join(self.get_loadable_attributes().collect(lambda each: "{} = {}".format(
+            each.name,
+            f"form.{each.name}.data" if not each.type.is_relationship()
+            else "{}.get(form.{}.data)".format(each.type.linked_attribute.entity.get_name(), each.name)
+        )))
 
     def get_loadable_attributes(self):
         return self.attributes.select(lambda each: each.is_loadable)
+
+    def get_names_relationship_attributes(self):
+        return ", ".join(self.attributes.select(lambda each: each.type.is_relationship()).collect(lambda each: each.type.linked_attribute.entity.get_name()))
