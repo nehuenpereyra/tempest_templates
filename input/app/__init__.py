@@ -7,11 +7,9 @@ from smallthon import sm_list
 from app.db import set_db
 from config.config import config
 from config.routes import set_routes
-# from app.helpers.login import set_login, authenticated
+from app.helpers.login import set_login, authenticated
 from app.helpers.permission import verify_permission
 from app.helpers.pagination import url_for_page
-from app.helpers.view.field import show_field
-from flask_cors import CORS
 
 
 def create_app(environment="development"):
@@ -27,20 +25,16 @@ def create_app(environment="development"):
     env = environ.get("FLASK_ENV", "development")
     app.config.from_object(config[env])
 
-    # Agrega CORS
-    CORS(app)
-
     # Añade a la app flask login
-    # set_login(app)
+    set_login(app)
 
     # Establece la db que posee la app
     set_db(app)
 
     # Funciones que se exportan al contexto de Jinja2
-    # app.jinja_env.globals.update(is_authenticated=authenticated)
+    app.jinja_env.globals.update(is_authenticated=authenticated)
     app.jinja_env.globals.update(verify_permission=verify_permission)
     app.jinja_env.globals.update(url_for_page=url_for_page)
-    app.jinja_env.globals.update(show_field=show_field)
 
     sm_list()
 

@@ -1,15 +1,14 @@
 {% extends "layout.html" %}
 
-{% macro input(field, placeholder) %}
-    {{ field.label }}
-            {% if ( field.errors|length == 0) %}
-              {{ field(class_="form-control form-control-user",placeholder=placeholder) }}
-            {% else %}
-              {{ field(class_="form-control form-control-user is-invalid",placeholder=placeholder) }}
-              {% for error in field.errors %}
-                <div class="invalid-feedback">{{ error }}</div>
-              {% endfor %}
-            {% endif %}
+{% macro input(field, type, placeholder) %}
+  {% if ( field.errors|length == 0) %}
+      {{ field(class_="form-control form-control-user", type=type, placeholder=placeholder) }}
+    {% else %}
+      {{ field(class_="form-control form-control-user is-invalid",type=type, placeholder=placeholder) }}
+      {% for error in field.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+      {% endfor %}
+    {% endif %}
 {% endmacro %}
 
 {% block title %}Login{% endblock %}
@@ -19,39 +18,27 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container" style="overflow: auto;padding-bottom: 200px;">
-        <div class="row justify-content-center">
-            <div class="col-md-9 col-lg-12 col-xl-10" style="width: 933px;height: 660px;">
-                <div class="card shadow-lg o-hidden border-0 my-5">
-                    <div class="card-body p-0">
-                        <div class="row d-sm-flex d-lg-flex d-xl-flex justify-content-sm-center justify-content-lg-center justify-content-xl-center">
-                            <div class="col-lg-6">
-                                <div class="p-5">
-                                    <div class="text-center">
-                                        <h4 class="text-dark mb-4">Bienvenido!</h4>
-                                    </div>
-                                    <form action="{{ url_for('auth_authenticate') }}" method="post"  class="needs-validation user">
-                                        {{ form.hidden_tag() }}
-                                        <div class="form-group">{{input(form.email,"Ingrese su email")}}</div>
-                                        <div class="form-group">{{input(form.password,"Ingrese su contraseña")}}</div>
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">                             
-                                                  {{ form.remember_me() }} {{ form.remember_me.label }}
-                                            </div>
-                                        </div><button class="btn btn-primary btn-block text-white btn-user" type="submit" style="background-color: #3a6ba6;">Ingresar</button></form>
-                                    <div class="text-center"></div>
-                                    <div class="text-center"></div>
-                                    {% if authError == True %}
-                                      <div class="alert alert-danger" role="alert" style="margin-top: 25px;">
-                                        Usuario o clave incorrecto.
-                                      </div> 
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+<div class="container" style="padding-top: 80px;padding-bottom: 600px;max-width: 320px;">
+  {% if authError == True %}
+    <div class="alert alert-danger" role="alert" style="margin-top: 25px;">
+      Usuario o clave incorrecto.
+    </div> 
+  {% endif %}
+  <form action="{{ url_for('auth_authenticate') }}" method="post" class="text-center border rounded shadow-sm p-4 bg-white">
+      {{ form.hidden_tag() }}
+      <div class="mb-2" style="font-size: 100px;color: #395e85;"><i class="fas fa-user-circle"></i></div>
+      <div class="form-group">{{input(form.email, "email", "Correo Electrónico")}}</div>
+      <div class="form-group">{{input(form.password, "password", "Contraseña")}}</div>
+      <div class="form-group">
+      <div class="custom-control custom-checkbox small" style="float: left;">                             
+        {{ form.remember_me() }} {{ form.remember_me.label }}
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Inicar Sesión</button>
+      </div><a href="#" style="display: block;text-align: center;font-size: 12px;color: #6f7a85;opacity: 0.9;text-decoration: none;">¿Olvido su contraseña?</a>
+      
+    </form>
+  
+  
+</div>
 {% endblock %}

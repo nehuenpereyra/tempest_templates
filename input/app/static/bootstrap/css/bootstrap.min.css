@@ -9423,8 +9423,9 @@ a:focus {
 }
 .sidebar #sidebarToggle:after {
   font-weight: 900;
-  content: "\f007";
-  font-family: Font awesome\5 Free;
+  content: "\f060";
+  /*font-family: Font awesome\5 Free; */
+  font-family: "Font Awesome\ 5 Free"; /* cjr */
   margin-right: 0.1rem;
 }
 .sidebar #sidebarToggle:hover {
@@ -9438,8 +9439,8 @@ a:focus {
   overflow: hidden;
 }
 .sidebar.toggled #sidebarToggle:after {
-  content: "\f105";
-  font-family: Font awesome\5 Free;
+  content: "\f061";
+  font-family: "Font Awesome\ 5 Free";
   margin-left: 0.25rem;
 }
 .sidebar .sidebar-brand {

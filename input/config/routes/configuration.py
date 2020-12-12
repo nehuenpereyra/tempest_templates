@@ -7,5 +7,3 @@ def set_routes(app):
                      configuration.update, methods=["POST"])
     app.add_url_rule("/configuracion/editar",
                      "configuration_edit", configuration.edit)
-    app.add_url_rule("/api/configuracion",
-                     "api_configuration", configuration.api)
