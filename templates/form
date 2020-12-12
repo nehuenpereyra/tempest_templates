@@ -1,14 +1,21 @@
 from .translate_form import TranslateForm
 from wtforms import SubmitField
-[[entity.get_import_list_for_unique()]]
+[[entity.get_model_import_for_form()]]
 [[entity.get_import_list_for_form()]]
 [[entity.get_import_list_for_validations()]]
 
 class [[entity.get_name()]]Form(TranslateForm):
 
     id = IntegerField()
-    [% for attribute in entity.attributes %]
+    [% for attribute in entity.get_loadable_attributes() %]
 [[ attribute.to_form() ]]
     [% endfor %]
 submit = SubmitField('Enviar')
 
+[% if entity.has_relationship_attributes_for_form() %]
+    def __init__(self, *args, **kwargs):
+        super([[entity.get_name()]]Form, self).__init__(*args, **kwargs)
+[% for attribute in entity.get_relationship_attributes_for_form() %]
+        self.[[ attribute.name ]].choices = [[ attribute.type.linked_attribute.entity.get_name() ]].all().collect(lambda each: (each.id, each.[[ attribute.type.linked_attribute_presented.name ]]))
+[% endfor %]
+[% endif %]

@@ -8,38 +8,24 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 class [[entity.get_name()]](db.Model):
 
-    __id = db.Column("id", db.Integer, primary_key=True)
+    id = db.Column("id", db.Integer, primary_key=True)
 [% for attribute in entity.attributes %]
     [[ attribute.to_model() ]]
 [% endfor %]
 
-    @hybrid_property
-    def id(self):
-        return self.__id
-
-    [% for attribute in entity.attributes %]
-
-    @hybrid_property
-    def [[ attribute.name ]](self):
-        return self.__[[ attribute.name ]]
-
-    @[[ attribute.name ]].setter
-    def [[ attribute.name ]](self, [[ attribute.name ]]):
-        self.__[[ attribute.name ]] = [[ attribute.name ]]
-    [% endfor %]
-
     def save(self):
-        if not self.__id:
+        if not self.id:
             db.session.add(self)
         db.session.commit()
 
-    def update(self, [[ ", ".join(entity.get_arguments_names_list()) ]]):
-[% for attribute in entity.attributes %]
+    def update(self, [[ ", ".join(entity.get_list_of_loadable_argument_names()) ]]):
+[% for attribute in entity.get_loadable_attributes() %]
         self.[[ attribute.name ]] = [[ attribute.name ]]
 [% endfor %]
+        self.save()
 
     def remove(self):
-        if self.__id:
+        if self.id:
             db.session.delete(self)
             db.session.commit()
 

@@ -11,7 +11,7 @@
         <div class="shadow-sm mt-3 p-3">
             <form class="text-left user" action="{{ url_for('[[entity.get_name_delimited()]]_create') }}" method="post" >
                 {{ form.hidden_tag() }}
-    [% for attribute in entity.attributes %]
+    [% for attribute in entity.get_loadable_attributes() %]
             <div class="form-group">
                     {{ input(form.[[ attribute.name ]]) }}
                 </div>
