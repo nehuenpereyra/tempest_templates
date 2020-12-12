@@ -53,11 +53,13 @@ class [[entity.get_name()]](db.Model):
 
     @staticmethod
     def all():
-        return [[ entity.get_name() ]].query.all()
+        query = [[ entity.get_name() ]].query.order_by([[ entity.get_name() ]].[[ entity.get_main_attribute().name]].asc())
+        return query.all()
 
     @staticmethod
     def all_paginated(page, per_page):
-        return [[ entity.get_name() ]].query.paginate(page=page, per_page=per_page, error_out=False)
+        query = [[ entity.get_name() ]].query.order_by([[ entity.get_name() ]].[[ entity.get_main_attribute().name]].asc())
+        return query.paginate(page=page, per_page=per_page, error_out=False)
 
     @staticmethod
     def get(id):
@@ -66,6 +68,7 @@ class [[entity.get_name()]](db.Model):
 [% for attribute in entity.attributes %][% if attribute.searchable %]
     @staticmethod
     def find_by_[[ attribute.name ]]([[ attribute.name ]]):
-        return [[ entity.get_name() ]].query.filter_by([[ attribute.name ]]=[[ attribute.name ]])
+        query = [[ entity.get_name() ]].query.order_by([[ entity.get_name() ]].[[ entity.get_main_attribute().name]].asc())
+        return query.filter_by([[ attribute.name ]]=[[ attribute.name ]])
 
 [% endif %][% endfor %]

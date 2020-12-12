@@ -3,7 +3,7 @@ from app.models.configuration import Configuration
 from app.models.alert import Alert
 from app.helpers.alert import add_alert, get_alert
 from app.helpers.permission import permission
-from app.models import [[entity.get_name()]]
+from app.models import [[entity.get_name()]], [[entity.get_names_relationship_attributes()]]
 from app.helpers.forms import [[entity.get_name()]]Form
 
 @permission('[[entity.get_name_delimited()]]_index')
