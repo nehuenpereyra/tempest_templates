@@ -34,12 +34,16 @@
                         </div>
                         
                         <div class="col-12 col-sm-auto d-flex justify-content-center align-items-center">
+                            {% if verify_permission('[[entity.get_name_delimited()]]_show') %}
                             <a class="btn btn-primary btn-sm mr-1" role="button" href="{{ url_for('[[entity.get_name_delimited()]]_show', id=[[entity.get_name_delimited()]].id) }}">
                                 <i class="fas fa-eye"></i>
                             </a>
+                            {% endif %}
+                            {% if verify_permission('[[entity.get_name_delimited()]]_update') %}
                             <a class="btn btn-primary btn-sm mr-1" role="button" href="{{ url_for('[[entity.get_name_delimited()]]_edit', id=[[entity.get_name_delimited()]].id) }}">
                                 <i class="fas fa-cog"></i>
                             </a>
+                            {% endif %}
                             {% if verify_permission('[[entity.get_name_delimited()]]_delete') %}
                                 <a onclick="return confirm('[[ messages["confirm_deletion"].format("{{{{{}.{}}}}}".format(entity.get_name_delimited(),entity.get_main_attribute().name))]]');" class="btn btn-danger btn-sm" role="button" href="{{ url_for('[[entity.get_name_delimited()]]_delete', id=[[entity.get_name_delimited()]].id) }}">
                                     <i class="far fa-trash-alt"></i>
