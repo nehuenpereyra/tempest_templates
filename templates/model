@@ -8,6 +8,26 @@ from werkzeug.security import generate_password_hash, check_password_hash
 [[ import_element ]]
 [% endfor %]
 
+[% if entity.is_user() %]
+def get_permission_method(user, permission):
+
+    permission_mapper = {
+        "user": user.allowed_user_id_list,
+        "role": user.allowed_role_id_list,
+        "permission": user.allowed_permission_id_list,
+        "request": user.allowed_request_id_list,
+        "career": user.allowed_career_id_list,
+        "cathedra": user.allowed_cathedra_id_list,
+        "office": user.allowed_office_id_list,
+        "charge": user.allowed_charge_id_list,
+        "employee": user.allowed_employee_id_list,
+        "job_position": user.allowed_job_position_id_list,
+        "request_type": user.allowed_request_type_id_list
+    }
+
+    return permission_mapper[permission]
+[% endif %]
+
 class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Model):
 
     id = db.Column("id", db.Integer, primary_key=True)
@@ -83,5 +103,63 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
         user = User.query.filter_by(username=username).first()
         if user and (check_password_hash(user.password, password)):
             return user
-        return None 
+        return None
+    
+    def is_admin(self):
+        return self.roles.any_satisfy(lambda each: each.name == "Administrador")
+
+    def has_permission_for(self, permission, id):
+        has_permission = self.roles.flat_collect(lambda each: each.permissions). \
+            any_satisfy(lambda each: each.name == permission)
+
+        if not has_permission:
+            return False
+        elif not id or self.is_admin():
+            return True
+
+        allowed_id_list_method = get_permission_method(
+            self, permission.split("_").first())
+
+        allowed_id_list = allowed_id_list_method()
+
+        if allowed_id_list is None:
+            return True
+
+        return allowed_id_list.includes(id)
+
+    def allowed_user_id_list(self):
+        return [self.id]
+
+    def allowed_role_id_list(self):
+        return self.roles.collect(lambda each: each.id)
+
+    def allowed_permission_id_list(self):
+        return self.roles.flat_collect(lambda each: each.permissions). \
+            remove_duplicated(). \
+            collect(lambda each: each.id)
+
+    def allowed_request_id_list(self):
+        return self.requests.collect(lambda each: each.id)
+    
+    def allowed_request_type_id_list(self):
+        return None
+
+    def allowed_career_id_list(self):
+        return None
+
+    def allowed_cathedra_id_list(self):
+        return None
+
+    def allowed_office_id_list(self):
+        return None
+
+    def allowed_charge_id_list(self):
+        return None
+
+    def allowed_employee_id_list(self):
+        return None
+
+    def allowed_job_position_id_list(self):
+        return None
+
 [% endif%] 

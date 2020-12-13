@@ -16,13 +16,13 @@ class UserSeeder(Seeder):
         roles = {each.name: each for each in Role.query.all()}
 
         admin_user = User(name="Juan", surname="Lopez", institutional_email="admin@admin.com",
-                    secondary_email="admin_secondary@admin.com", username="Juanchuz", 
-                    password=generate_password_hash("admin123"), roles=[roles["Administrador"]])
+                          secondary_email="admin_secondary@admin.com", username="admin",
+                          password=generate_password_hash("password"), roles=[roles["Administrador"]])
         admin_user.save()
         print(f" - {admin_user.username} user OK")
 
-        operator_user = User(name="Lisa", surname="Gomez",institutional_email="operador@operador.com",
-                    secondary_email="operador_secondary@operador.com", username="lisa", 
-                    password=generate_password_hash("lisa123"), roles=[roles["Responsable de Catedra"]])
-        operator_user.save()
-        print(f" - {operator_user.username} user OK")
+        cathedra_manager = User(name="Lisa", surname="Gomez", institutional_email="operador@operador.com",
+                                secondary_email="operador_secondary@operador.com", username="lisa",
+                                password=generate_password_hash("password"), roles=[roles["Responsable de Catedra"]])
+        cathedra_manager.save()
+        print(f" - {cathedra_manager.username} user OK")
