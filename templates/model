@@ -1,6 +1,5 @@
 
 from app.db import db
-from sqlalchemy.ext.hybrid import hybrid_property
 
 [% for import_element in entity.get_import_list_for_model() %]
 [[ import_element ]]
@@ -46,10 +45,12 @@ class [[entity.get_name()]](db.Model):
         return query.all()
 
     @staticmethod
-    def all_paginated(page, per_page):
+    def all_paginated(page, per_page, ids=None):
         query = [[ entity.get_name() ]].query
         query = query.filter_by(is_deleted=False)
         query = query.order_by([[ entity.get_name() ]].[[ entity.get_main_attribute().name]].asc())
+        if ids:
+            query = query.filter([[ entity.get_name() ]].id.in_(ids))
         return query.paginate(page=page, per_page=per_page, error_out=False)
 
     @staticmethod
