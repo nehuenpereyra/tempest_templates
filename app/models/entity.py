@@ -21,6 +21,9 @@ class Entity:
     def get_name(self):
         return self.name
 
+    def is_user(self):
+        return self.name == "User"
+
     def get_name_delimited(self):
         return re.sub("([A-Z])", "_\\1", self.name).strip().lower()[1:]
 
