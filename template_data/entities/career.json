@@ -1,0 +1,39 @@
+{
+    "name": "Career",
+    "label": "Carrera",
+    "attributes": [
+        {
+            "name": "name",
+            "label": "Nombre",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 64
+                }
+            },
+            "validations": [
+                "required",
+                "unique",
+                "length-3-64"
+            ],
+            "searchable": true,
+            "is_main": true
+        }, {
+            "name": "cathedras",
+            "label": "Catedras",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "Cathedra",
+                        "attribute": "careers",
+                        "attribute_presented": "name"
+                    },
+                    "cardinality": "many"
+                }
+            },
+            "is_loadable": false
+        }
+        
+    ]
+}

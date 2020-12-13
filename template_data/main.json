@@ -1,0 +1,35 @@
+{
+    "entities": [
+        "entities/user.json",
+        "entities/role.json",
+        "entities/permission.json",
+        "entities/career.json",
+        "entities/cathedra.json",
+        "entities/office.json",
+        "entities/charge.json",
+        "entities/employee.json",
+        "entities/job_position.json",
+        "entities/request.json",
+        "entities/request_type.json"
+    ],
+    "input": "input",
+    "output": {
+        "root": "output",
+        "resources": "app/resources",
+        "models": "app/models",
+        "forms": "app/helpers/forms",
+        "templates": "app/templates",
+        "routes": "config/routes"
+    },
+    "view": {
+        "main_block": "sub_content",
+        "extends": "authorized_layout.html"
+    },
+    "message": {
+        "create": "Se creo {}",
+        "modified": "Se modifico {}",
+        "deleted": "Se borro {}",
+        "not_exist": "No existe {}",
+        "confirm_deletion": "¿Seguro borrar {}?"
+    }
+}

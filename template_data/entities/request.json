@@ -1,0 +1,83 @@
+{
+    "name": "Request",
+    "label": "Solicitud",
+    "attributes": [
+        {
+            "name": "content",
+            "label": "Contenido",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 200,
+                    "is_large": true
+                }
+            },
+            "validations": [
+                "required",
+                "length-3-200"
+            ],
+            "searchable": false,
+            "is_main": true
+        }, {
+            "name": "is_resolved",
+            "label": "Resuelto",
+            "type": {
+                "name": "boolean"
+            },
+            "default": false,
+            "searchable": true
+        }, {
+            "name": "receive_email",
+            "label": "Recibir Correo Electrónico",
+            "type": {
+                "name": "boolean"
+            },
+            "default": false,
+            "searchable": false
+        }, {
+            "name": "timestamp",
+            "label": "Fecha de Creación",
+            "type": {
+                "name": "datetime"
+            },
+            "validations": [
+                "required"
+            ],
+            "searchable": true
+        }, {
+            "name": "user",
+            "label": "Usuario",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "User",
+                        "attribute": "requests",
+                        "attribute_presented": "name"
+                    },
+                    "cardinality": "one"
+                }
+            },
+            "validations": [
+                "required"
+            ]
+        }, {
+            "name": "request_type",
+            "label": "Tipo de Solicitud",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "RequestType",
+                        "attribute": "requests",
+                        "attribute_presented": "name"
+                    },
+                    "cardinality": "one"
+                }
+            },
+            "validations": [
+                "required"
+            ]
+        }
+    ]
+}

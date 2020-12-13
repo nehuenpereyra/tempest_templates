@@ -1,0 +1,52 @@
+{
+    "name": "Role",
+    "label": "Rol",
+    "attributes": [
+        {
+            "name": "name",
+            "label": "Nombre",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 32
+                }
+            },
+            "validations": [
+                "required",
+                "unique",
+                "length-3-32"
+            ],
+            "searchable": false,
+            "is_main": true
+        }, {
+            "name": "users",
+            "label": "Usuarios",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "User",
+                        "attribute": "roles",
+                        "attribute_presented": "name"
+                    },
+                    "cardinality": "many"
+                }
+            },
+            "is_loadable": false
+        }, {
+            "name": "permissions",
+            "label": "Permisos",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "Permission",
+                        "attribute": "roles",
+                        "attribute_presented": "name"
+                    },
+                    "cardinality": "many"
+                }
+            }
+        }
+    ]
+}

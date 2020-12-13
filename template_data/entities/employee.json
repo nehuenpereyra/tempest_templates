@@ -1,0 +1,91 @@
+{
+    "name": "Employee",
+    "label": "Empleado",
+    "attributes": [
+        {
+            "name": "name",
+            "label": "Nombre",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 32
+                }
+            },
+            "validations": [
+                "required",
+                "length-3-32"
+            ],
+            "searchable": true,
+            "is_main": true
+        }, {
+            "name": "surname",
+            "label": "Apellido",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 32
+                }
+            },
+            "validations": [
+                "required",
+                "length-3-32"
+            ],
+            "searchable": true
+        }, {
+            "name": "dni",
+            "label": "DNI",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 16
+                }
+            },
+            "validations": [
+                "length-6-16"
+            ],
+            "searchable": true
+        }, {
+            "name": "institutional_email",
+            "label": "Correo Electrónico Institucional",
+            "type": {
+                "name": "email",
+                "arguments": {
+                    "length": 64
+                }
+            },
+            "validations": [
+                "required",
+                "length-3-64"
+            ],
+            "searchable": true
+        }, {
+            "name": "secondary_email",
+            "label": "Correo Electrónico Secundario",
+            "type": {
+                "name": "email",
+                "arguments": {
+                    "length": 64
+                }
+            },
+            "validations": [
+                "length-3-64"
+            ],
+            "searchable": true
+        }, {
+            "name": "job_positions",
+            "label": "Puestos Asignados",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "JobPosition",
+                        "attribute": "employee",
+                        "attribute_presented": "start_date"
+                    },
+                    "cardinality": "many"
+                }
+            },
+            "is_loadable": false
+        }
+    ]
+}

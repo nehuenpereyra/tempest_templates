@@ -1,0 +1,56 @@
+{
+    "name": "Charge",
+    "label": "Cargo",
+    "attributes": [
+        {
+            "name": "name",
+            "label": "Nombre",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 64
+                }
+            },
+            "validations": [
+                "required",
+                "unique",
+                "length-3-64"
+            ],
+            "searchable": true,
+            "is_main": true
+        }, {
+            "name": "is_docent",
+            "label": "Es cargo docente",
+            "type": {
+                "name": "boolean"
+            },
+            "default": false,
+            "searchable": true
+        }, {
+            "name": "order",
+            "label": "Orden",
+            "type": {
+                "name": "integer"
+            },
+            "validations": [
+                "required"
+            ],
+            "searchable": true
+        }, {
+            "name": "job_positions",
+            "label": "Puestos Asignados",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "JobPosition",
+                        "attribute": "charge",
+                        "attribute_presented": "start_date"
+                    },
+                    "cardinality": "many"
+                }
+            },
+            "is_loadable": false
+        }
+    ]
+}

@@ -8,11 +8,11 @@ from app.models import EntityBuilder
 
 def run():
 
-    main_json = load_json("own/main.json")
+    main_json = load_json("template_data/main.json")
     builder = EntityBuilder()
 
     for entity_route in main_json["entities"]:
-        builder.add_entity(load_json("own/" + entity_route))
+        builder.add_entity(load_json("template_data/" + entity_route))
 
     entities = builder.build()
 

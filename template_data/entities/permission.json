@@ -1,0 +1,37 @@
+{
+    "name": "Permission",
+    "label": "Permiso",
+    "attributes": [
+        {
+            "name": "name",
+            "label": "Nombre",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 32
+                }
+            },
+            "validations": [
+                "required",
+                "unique",
+                "length-3-32"
+            ],
+            "searchable": false,
+            "is_main": true
+        }, {
+            "name": "roles",
+            "label": "Roles",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "Role",
+                        "attribute": "permissions",
+                        "attribute_presented": "name"
+                    },
+                    "cardinality": "many"
+                }
+            }
+        }
+    ]
+}

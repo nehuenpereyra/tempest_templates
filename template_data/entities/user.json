@@ -1,0 +1,124 @@
+{
+    "name": "User",
+    "label": "Usuario",
+    "attributes": [
+        {
+            "name": "name",
+            "label": "Nombre",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 32
+                }
+            },
+            "validations": [
+                "required",
+                "length-3-32"
+            ],
+            "searchable": true,
+            "is_main": true
+        }, {
+            "name": "surname",
+            "label": "Apellido",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 32
+                }
+            },
+            "validations": [
+                "required",
+                "length-3-32"
+            ],
+            "searchable": true
+        }, {
+            "name": "username",
+            "label": "Usuario",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 32
+                }
+            },
+            "validations": [
+                "required",
+                "length-3-32"
+            ],
+            "searchable": true
+        }, {
+            "name": "password",
+            "label": "Contraseña",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 128
+                }
+            },
+            "validations": [
+                "required",
+                "length-8-128"
+            ],
+            "searchable": true
+        }, {
+            "name": "institutional_email",
+            "label": "Correo Electrónico Institucional",
+            "type": {
+                "name": "email",
+                "arguments": {
+                    "length": 32
+                }
+            },
+            "validations": [
+                "required",
+                "length-3-32"
+            ],
+            "searchable": true
+        }, {
+            "name": "secondary_email",
+            "label": "Correo Electrónico Secundario",
+            "type": {
+                "name": "email",
+                "arguments": {
+                    "length": 32
+                }
+            },
+            "validations": [
+                "required",
+                "length-3-32"
+            ],
+            "searchable": true
+        }, {
+            "name": "roles",
+            "label": "Roles",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "Role",
+                        "attribute": "users",
+                        "attribute_presented": "name"
+                    },
+                    "cardinality": "many"
+                }
+            },
+            "validations": [
+                "required"
+            ]
+        }, {
+            "name": "requests",
+            "label": "Solicitudes",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "Request",
+                        "attribute": "user",
+                        "attribute_presented": "content"
+                    },
+                    "cardinality": "many"
+                }
+            },
+            "is_loadable": false
+        }
+    ]
+}

@@ -1,0 +1,61 @@
+{
+    "name": "RequestType",
+    "label": "Tipo de Solicitud",
+    "attributes": [
+        {
+            "name": "name",
+            "label": "Nombre",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 32
+                }
+            },
+            "validations": [
+                "required",
+                "unique",
+                "length-3-32"
+            ],
+            "searchable": true,
+            "is_main": true
+        }, {
+            "name": "message",
+            "label": "Mensaje Informativo",
+            "type": {
+                "name": "string",
+                "arguments": {
+                    "length": 200,
+                    "is_large": true
+                }
+            },
+            "validations": [
+                "required",
+                "length-3-200"
+            ],
+            "searchable": false
+        }, {
+            "name": "state",
+            "label": "Estado",
+            "type": {
+                "name": "boolean"
+            },
+            "default": true,
+            "searchable": true
+        }, {
+            "name": "requests",
+            "label": "Solicitudes",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "Request",
+                        "attribute": "request_type",
+                        "attribute_presented": "content"
+                    },
+                    "cardinality": "many"
+                }
+            },
+            "is_loadable": false
+        }
+    ]
+}

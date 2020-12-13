@@ -1,0 +1,76 @@
+{
+    "name": "JobPosition",
+    "label": "Puesto de Trabajo",
+    "attributes": [
+        {
+            "name": "start_date",
+            "label": "Fecha de Inicio",
+            "type": {
+                "name": "datetime"
+            },
+            "validations": [
+                "required"
+            ],
+            "searchable": true,
+            "is_main": true
+        }, {
+            "name": "end_date",
+            "label": "Fecha de Fin",
+            "type": {
+                "name": "datetime"
+            },
+            "searchable": true
+        }, {
+            "name": "charge",
+            "label": "Cargo",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "Charge",
+                        "attribute": "job_positions",
+                        "attribute_presented": "name"
+                    },
+                    "cardinality": "one"
+                }
+            },
+            "validations": [
+                "required"
+            ]
+        }, {
+            "name": "cathedra",
+            "label": "Catedra",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "Cathedra",
+                        "attribute": "staff",
+                        "attribute_presented": "name"
+                    },
+                    "cardinality": "one"
+                }
+            },
+            "validations": [
+                "required"
+            ]
+        }, {
+            "name": "employee",
+            "label": "Empleado",
+            "type": {
+                "name": "relationship",
+                "arguments": {
+                    "linked": {
+                        "class": "Employee",
+                        "attribute": "job_positions",
+                        "attribute_presented": "name"
+                    },
+                    "cardinality": "one"
+                }
+            },
+            "validations": [
+                "required"
+            ]
+        }
+    ]
+}
