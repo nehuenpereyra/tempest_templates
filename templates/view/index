@@ -2,6 +2,7 @@
 
 [% block import %]
 {% from 'macros/alert.html' import  show_alert %}
+{% from 'macros/pagination.html' import  pagination %}
 [% endblock %]
 
 [% block title %][[ entity.label ]][% endblock %]
@@ -56,25 +57,5 @@
         </ul>
     {% endif %}
 
-    <nav class="d-flex justify-content-center justify-content-sm-end mt-3">
-        <ul class="pagination">
-            {%- for page in [[entity.get_name_plural_delimited()]].iter_pages() %}
-                {% if page %}
-                    {% if page != [[entity.get_name_plural_delimited()]].page %}
-                        <li class="page-item">
-                            <a class="page-link" href="{{ url_for_page('[[entity.get_name_delimited()]]_index', page) }}">{{ page }}</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item active">
-                            <a class="page-link">{{ page }}</a>
-                        </li>
-                    {% endif %}
-                {% else %}
-                    <li class="page-item">
-                        <span class="page-link">...</span>
-                    </li>
-                {% endif %}
-            {%- endfor %}
-        </ul>
-    </nav>
+    {{ pagination([[entity.get_name_plural_delimited()]], '[[entity.get_name_delimited()]]_index' )}}
 [% endblock %]

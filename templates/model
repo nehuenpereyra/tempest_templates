@@ -1,12 +1,15 @@
 
 from app.db import db
 from sqlalchemy.ext.hybrid import hybrid_property
-
+[% if entity.is_user() %]
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
+[% endif%] 
 [% for import_element in entity.get_import_list_for_model() %]
 [[ import_element ]]
 [% endfor %]
 
-class [[entity.get_name()]](db.Model):
+class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Model):
 
     id = db.Column("id", db.Integer, primary_key=True)
 [% for attribute in entity.attributes %]
@@ -71,3 +74,11 @@ class [[entity.get_name()]](db.Model):
         return query.filter_by([[ attribute.name ]]=[[ attribute.name ]], is_deleted=False)
 
 [% endif %][% endfor %]
+[% if entity.is_user() %]
+    @staticmethod
+    def login(username, password):
+        user = User.query.filter_by(username=username).first()
+        if user and (check_password_hash(user.password, password)):
+            return user
+        return None 
+[% endif%] 

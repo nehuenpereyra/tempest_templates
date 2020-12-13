@@ -17,6 +17,7 @@ class PermissionSeeder(Seeder):
         print(f" - Configuration Permission OK")
 
         Permission(name="user_index").save()
+        Permission(name="user_show").save()
         Permission(name="user_create").save()
         Permission(name="user_update").save()
         Permission(name="user_delete").save()
