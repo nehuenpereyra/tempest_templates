@@ -39,6 +39,9 @@ def create():
     form = [[entity.get_name()]]Form(id=None)
     if form.validate_on_submit():
         [[entity.get_name_delimited()]] = [[entity.get_name()]]([[entity.get__list_args_resource()]])
+[% if entity.is_user() %]
+        [[entity.get_name_delimited()]].set_password(form.password.data)
+[% endif %]
         [[entity.get_name_delimited()]].save()
         add_alert(
             Alert("success", f"[[ main_json["message"]["create"].format("{{{}.{}}}".format(entity.get_name_delimited(),entity.get_main_attribute().name))]]"))
@@ -70,6 +73,9 @@ def update(id):
     form = [[entity.get_name()]]Form(id=id)
     if not form.validate_on_submit():
         return render_template("[[entity.get_name_delimited()]]/edit.html", [[entity.get_name_delimited()]]=[[entity.get_name_delimited()]], form=form)
+[% if entity.is_user() %]
+    [[entity.get_name_delimited()]].set_password(form.password.data)
+[% endif %]
     [[entity.get_name_delimited()]].update([[entity.get__list_args_resource()]])
     add_alert(
         Alert("success", f"[[ main_json["message"]["modified"].format("{{{}.{}}}".format(entity.get_name_delimited(),entity.get_main_attribute().name))]]"))

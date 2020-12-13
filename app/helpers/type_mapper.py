@@ -1,5 +1,5 @@
 
-from app.models.types import RelationshipType, StringType, BooleanType, IntegerType, FloatType, EmailType, DateTimeType, DateType, TimeType, TelephoneType, UrlType
+from app.models.types import RelationshipType, StringType, BooleanType, IntegerType, FloatType, EmailType, DateTimeType, DateType, TimeType, TelephoneType, UrlType, PasswordType
 
 type_mapper = {
     "relationship": RelationshipType,
@@ -13,4 +13,5 @@ type_mapper = {
     "time": TimeType,
     "telephone": TelephoneType,
     "url": UrlType,
+    "password": PasswordType
 }

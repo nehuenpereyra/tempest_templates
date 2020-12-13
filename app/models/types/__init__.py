@@ -11,3 +11,4 @@ from .date_type import DateType
 from .time_type import TimeType
 from .telephone_type import TelephoneType
 from .url_type import UrlType
+from .password_type import PasswordType
