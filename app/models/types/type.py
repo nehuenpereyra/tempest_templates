@@ -19,6 +19,9 @@ class Type:
     def get_widget(self):
         pass
 
+    def get_model_arguments(self):
+        return {}
+
     def get_form_arguments(self):
         return {}
     

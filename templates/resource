@@ -39,12 +39,19 @@ def create():
 
 @permission('[[entity.get_name_delimited()]]_update')
 def edit(id):
-    [[entity.get_name_delimited()]] = [[entity.get_name()]].get(id)
+    [[ entity.get_name_delimited() ]] = [[entity.get_name()]].get(id)
     if not [[entity.get_name_delimited()]]:
         add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.label.lower())]]"))
         return redirect(url_for("[[entity.get_name_delimited()]]_index"))
 
-    return render_template("[[entity.get_name_delimited()]]/edit.html", [[entity.get_name_delimited()]]=[[entity.get_name_delimited()]], form=[[entity.get_name()]]Form(obj=[[entity.get_name_delimited()]]))
+    form = [[entity.get_name()]]Form(obj=[[entity.get_name_delimited()]])
+[% for attribute in entity.get_relationship_attributes_for_form() %]
+    [% if not attribute.is_required() %]if [[ entity.get_name_delimited() ]].[[ attribute.name ]] is not None:
+        [% endif %]form.[[ attribute.name ]].data = [[ entity.get_name_delimited() ]].[[ attribute.name ]].[% if attribute.type.has_cardinality_one() %]id[% else %]collect(lambda each: each.id)[% endif %]
+    
+[% endfor %]
+
+    return render_template("[[entity.get_name_delimited()]]/edit.html", [[entity.get_name_delimited()]]=[[entity.get_name_delimited()]], form=form)
 
 @permission('[[entity.get_name_delimited()]]_update')
 def update(id):
