@@ -15,7 +15,7 @@ def index():
 
 @permission('[[entity.get_name_delimited()]]_show')
 def show(id):
-    [[entity.get_name_delimited()]] = [[entity.get_name()]].query.get(id)
+    [[entity.get_name_delimited()]] = [[entity.get_name()]].get(id)
     if not [[entity.get_name_delimited()]]:
         add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.label.lower())]]"))
         return redirect(url_for("[[entity.get_name_delimited()]]_index"))
@@ -39,7 +39,7 @@ def create():
 
 @permission('[[entity.get_name_delimited()]]_update')
 def edit(id):
-    [[entity.get_name_delimited()]] = [[entity.get_name()]].query.get(id)
+    [[entity.get_name_delimited()]] = [[entity.get_name()]].get(id)
     if not [[entity.get_name_delimited()]]:
         add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.label.lower())]]"))
         return redirect(url_for("[[entity.get_name_delimited()]]_index"))

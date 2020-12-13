@@ -12,6 +12,7 @@ class [[entity.get_name()]](db.Model):
 [% for attribute in entity.attributes %]
     [[ attribute.to_model() ]]
 [% endfor %]
+    is_deleted = db.Column(db.Boolean, nullable=False, default=False)
 
     def save(self):
         if not self.id:
@@ -26,8 +27,8 @@ class [[entity.get_name()]](db.Model):
 
     def remove(self):
         if self.id:
-            db.session.delete(self)
-            db.session.commit()
+            self.is_deleted = True
+            self.save()
 
     @staticmethod
     def delete(id):
@@ -39,26 +40,34 @@ class [[entity.get_name()]](db.Model):
 
     @staticmethod
     def all():
-        query = [[ entity.get_name() ]].query.order_by([[ entity.get_name() ]].[[ entity.get_main_attribute().name]].asc())
+        query = [[ entity.get_name() ]].query
+        query = query.filter_by(is_deleted=False)
+        query = query.order_by([[ entity.get_name() ]].[[ entity.get_main_attribute().name]].asc())
         return query.all()
 
     @staticmethod
     def all_paginated(page, per_page):
-        query = [[ entity.get_name() ]].query.order_by([[ entity.get_name() ]].[[ entity.get_main_attribute().name]].asc())
+        query = [[ entity.get_name() ]].query
+        query = query.filter_by(is_deleted=False)
+        query = query.order_by([[ entity.get_name() ]].[[ entity.get_main_attribute().name]].asc())
         return query.paginate(page=page, per_page=per_page, error_out=False)
 
     @staticmethod
     def get(id):
-        return [[ entity.get_name() ]].query.get(id)
+        [[entity.get_name_delimited()]] = [[ entity.get_name() ]].query.get(id)
+        return [[entity.get_name_delimited()]] if [[entity.get_name_delimited()]] and [[entity.get_name_delimited()]].is_deleted==False else None
+        
 
     @staticmethod
     def get_all(ids):
-        return [[ entity.get_name() ]].query.filter([[ entity.get_name() ]].id.in_(ids)).all()
+        query = [[ entity.get_name() ]].query
+        query = query.filter_by(is_deleted=False)
+        return query.filter([[ entity.get_name() ]].id.in_(ids)).all()
 
 [% for attribute in entity.attributes %][% if attribute.searchable %]
     @staticmethod
     def find_by_[[ attribute.name ]]([[ attribute.name ]]):
         query = [[ entity.get_name() ]].query.order_by([[ attribute.type.get_order_query_for_model() ]].asc())
-        return query.filter_by([[ attribute.name ]]=[[ attribute.name ]])
+        return query.filter_by([[ attribute.name ]]=[[ attribute.name ]], is_deleted=False)
 
 [% endif %][% endfor %]
