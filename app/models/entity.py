@@ -56,7 +56,7 @@ class Entity:
                 ))
             ))
 
-        #if self.attributes.any_satisfy(lambda each: type(each.type) == DateTimeType):
+        # if self.attributes.any_satisfy(lambda each: type(each.type) == DateTimeType):
         #    import_list.add("\nfrom sqlalchemy import DateTime, cast")
         return import_list
 
@@ -72,6 +72,9 @@ class Entity:
         return self.attributes.select(
             lambda each: each.type.is_relationship() and each.is_loadable
         )
+
+    def get_many_relationship_attributes(self):
+        return self.attributes.select(lambda each: each.type.is_relationship() and each.type.has_cardinality_many())
 
     def get_many_to_many_relationship_attributes(self):
         return self.attributes.select(lambda each: each.type.is_relationship() and each.type.has_cardinality_many_to_many())

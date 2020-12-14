@@ -27,7 +27,7 @@
     <ul class="list-group shadow-sm my-4 mx-2">
 [% for attribute in entity.attributes %]
         <li class="list-group-item">
-            <h6[% if not attribute.type.is_relationship() or attribute.type.has_cardinality_one() %] class="mb-0"[% endif %]>[[ attribute.label ]]</h6>{{ show_field([[ entity.get_name_delimited() ]].[[ attribute.name ]][% if attribute.type.is_relationship() %][% if attribute.type.has_cardinality_many() %], list=True[% endif %], attribute="[[ attribute.type.linked_attribute_presented.name ]]", link="[[ attribute.type.linked_attribute.entity.get_name_delimited() ]]_show"[% endif %], required=[[ attribute.validations[0].is_required ]])|safe }}
+            <h6[% if not attribute.type.is_relationship() or attribute.type.has_cardinality_one() %] class="mb-0"[% endif %]>[[ attribute.label ]]</h6>{{ show_field([[ entity.get_name_delimited() ]].[% if attribute.type.is_relationship() and attribute.type.has_cardinality_many() %]get_[[ attribute.name ]]()[% else %][[ attribute.name ]][% endif %][% if attribute.type.is_relationship() %][% if attribute.type.has_cardinality_many() %], list=True[% endif %], attribute="[[ attribute.type.linked_attribute_presented.name ]]", link="[[ attribute.type.linked_attribute.entity.get_name_delimited() ]]_show"[% endif %], required=[[ attribute.validations[0].is_required ]])|safe }}
         </li>
 [% endfor %]
     </ul>

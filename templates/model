@@ -36,6 +36,15 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
 [% endfor %]
     is_deleted = db.Column(db.Boolean, nullable=False, default=False)
 
+[% for attribute in entity.get_many_relationship_attributes() %]
+    def get_[[ attribute.name ]](self):
+        return self.[[ attribute.name ]].select(lambda each: not each.is_deleted)
+
+    def set_[[ attribute.name ]](self, [[ attribute.name ]]):
+        self.[[ attribute.name ]] = self.[[ attribute.name ]].select(
+            lambda each: each.is_deleted) + [[ attribute.name ]]
+[% endfor %]
+
     def save(self):
         if not self.id:
             db.session.add(self)
@@ -43,7 +52,11 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
 
     def update(self, [[ ", ".join(entity.get_list_of_loadable_argument_names()) ]]):
 [% for attribute in entity.get_loadable_attributes() %]
+[% if attribute.type.is_relationship() and attribute.type.has_cardinality_many() %]
+        self.set_[[ attribute.name ]]([[ attribute.name ]])
+[% else %]
         self.[[ attribute.name ]] = [[ attribute.name ]]
+[% endif %]
 [% endfor %]
         self.save()
 
