@@ -83,10 +83,11 @@ def update(id):
 
 @permission('[[entity.get_name_delimited()]]_delete')
 def delete(id):
-    [[entity.get_name_delimited()]] = [[entity.get_name()]].delete(id)
-    if [[entity.get_name_delimited()]]:
-        add_alert(
-            Alert("success", f"[[ main_json["message"]["deleted"].format("{{{}.{}}}".format(entity.get_name_delimited(),entity.get_main_attribute().name))]]"))
-    else:
+    [[entity.get_name_delimited()]] = [[entity.get_name()]].get(id)
+    if not [[entity.get_name_delimited()]] or [[entity.get_name_delimited()]].is_deleted:
         add_alert(Alert("danger", "[[ main_json["message"]["not_exist"].format(entity.label.lower())]]"))
+    else:
+        [[entity.get_name_delimited()]].remove()
+        add_alert(
+                Alert("success", f"[[ main_json["message"]["deleted"].format("{{{}.{}}}".format(entity.get_name_delimited(),entity.get_main_attribute().name))]]"))
     return redirect(url_for("[[entity.get_name_delimited()]]_index"))
