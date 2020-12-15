@@ -65,12 +65,12 @@
             "type": {
                 "name": "email",
                 "arguments": {
-                    "length": 32
+                    "length": 64
                 }
             },
             "validations": [
                 "required",
-                "length-3-32"
+                "length-3-64"
             ],
             "searchable": true
         }, {
@@ -79,12 +79,12 @@
             "type": {
                 "name": "email",
                 "arguments": {
-                    "length": 32
+                    "length": 64
                 }
             },
             "validations": [
                 "required",
-                "length-3-32"
+                "length-3-64"
             ],
             "searchable": true
         }, {

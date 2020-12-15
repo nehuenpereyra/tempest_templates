@@ -75,8 +75,8 @@
             ],
             "searchable": false
         }, {
-            "name": "careers",
-            "label": "Carreras",
+            "name": "career",
+            "label": "Carrera",
             "type": {
                 "name": "relationship",
                 "arguments": {
@@ -85,7 +85,7 @@
                         "attribute": "cathedras",
                         "attribute_presented": "name"
                     },
-                    "cardinality": "many"
+                    "cardinality": "one"
                 }
             },
             "validations": [

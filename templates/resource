@@ -44,7 +44,7 @@ def create():
 [% endif %]
         [[entity.get_name_delimited()]].save()
         add_alert(
-            Alert("success", f"[[ main_json["message"]["create"].format("{{{}.{}}}".format(entity.get_name_delimited(),entity.get_main_attribute().name))]]"))
+            Alert("success", f'[[ main_json["message"]["create"].format('{} "{{{}.{}}}"'.format(entity.label.lower(), entity.get_name_delimited(),entity.get_main_attribute().name))]]'))
         return redirect(url_for("[[entity.get_name_delimited()]]_index"))
     return render_template("[[entity.get_name_delimited()]]/new.html", form=form)
 
@@ -78,7 +78,7 @@ def update(id):
 [% endif %]
     [[entity.get_name_delimited()]].update([[entity.get__list_args_resource()]])
     add_alert(
-        Alert("success", f"[[ main_json["message"]["modified"].format("{{{}.{}}}".format(entity.get_name_delimited(),entity.get_main_attribute().name))]]"))
+        Alert("success", f'[[ main_json["message"]["modified"].format('{} "{{{}.{}}}"'.format(entity.label.lower(), entity.get_name_delimited(),entity.get_main_attribute().name))]]'))
     return redirect(url_for("[[entity.get_name_delimited()]]_index"))
 
 @permission('[[entity.get_name_delimited()]]_delete')
@@ -89,5 +89,5 @@ def delete(id):
     else:
         [[entity.get_name_delimited()]].remove()
         add_alert(
-                Alert("success", f"[[ main_json["message"]["deleted"].format("{{{}.{}}}".format(entity.get_name_delimited(),entity.get_main_attribute().name))]]"))
+                Alert("success", f'[[ main_json["message"]["deleted"].format('{} "{{{}.{}}}"'.format(entity.label.lower(), entity.get_name_delimited(),entity.get_main_attribute().name))]]'))
     return redirect(url_for("[[entity.get_name_delimited()]]_index"))

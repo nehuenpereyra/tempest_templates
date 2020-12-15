@@ -25,11 +25,11 @@
         "main_block": "sub_content",
         "extends": "authorized_layout.html"
     },
-    "message": {
-        "create": "Se creo {}",
-        "modified": "Se modifico {}",
-        "deleted": "Se borro {}",
-        "not_exist": "No existe {}",
-        "confirm_deletion": "¿Seguro borrar {}?"
+    "message":{
+        "create": "El {} se ha creado correctamente.",
+        "modified": "El {} se ha modificado correctamente.",
+        "deleted": "El {} se ha borrado correctamente.",
+        "not_exist": "El {} no existe.",
+        "confirm_deletion": "¿Seguro que deseas eliminar el {} del sistema?"
     }
 }

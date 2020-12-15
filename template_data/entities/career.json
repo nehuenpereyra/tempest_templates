@@ -26,7 +26,7 @@
                 "arguments": {
                     "linked": {
                         "class": "Cathedra",
-                        "attribute": "careers",
+                        "attribute": "career",
                         "attribute_presented": "name"
                     },
                     "cardinality": "many"

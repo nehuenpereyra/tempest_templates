@@ -18,7 +18,7 @@
             </a>
         {% endif %}
         {% if verify_permission('[[ entity.get_name_delimited() ]]_delete') %}
-            <a onclick="return confirm('[[ messages["confirm_deletion"].format("{{{{{}.{}}}}}".format(entity.get_name_delimited(),entity.get_main_attribute().name)) ]]');" class="btn btn-danger btn-sm" role="button" href="{{ url_for('[[ entity.get_name_delimited() ]]_delete', id=[[ entity.get_name_delimited() ]].id) }}">
+            <a onclick='return confirm(`[[ messages["confirm_deletion"].format('{} "{{{{{}.{}}}}}"'.format(entity.label.lower(), entity.get_name_delimited(),entity.get_main_attribute().name)) ]]`);' class="btn btn-danger btn-sm" role="button" href="{{ url_for('[[ entity.get_name_delimited() ]]_delete', id=[[ entity.get_name_delimited() ]].id) }}">
                 <i class="far fa-trash-alt"></i>
             </a>
         {% endif %}
