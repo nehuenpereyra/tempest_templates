@@ -65,49 +65,49 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
             self.is_deleted = True
             self.save()
 
-    @staticmethod
-    def delete(id):
-        [[ entity.get_name_delimited() ]] = [[ entity.get_name() ]].query.get(id)
+    @classmethod
+    def delete(self, id):
+        [[ entity.get_name_delimited() ]] = self.query.get(id)
         if [[ entity.get_name_delimited() ]]:
             [[ entity.get_name_delimited() ]].remove()
             return [[ entity.get_name_delimited() ]]
         return None
 
-    @staticmethod
-    def all():
-        query = [[ entity.get_name() ]].query
+    @classmethod
+    def all(self):
+        query = self.query
         query = query.filter_by(is_deleted=False)
-        query = query.order_by([[ entity.get_name() ]].[[ entity.get_main_attribute().name]].asc())
+        query = query.order_by(self.[[ entity.get_main_attribute().name]].asc())
         return query.all()
 
-    @staticmethod
-    def all_paginated(page, per_page, ids=None):
-        query = [[ entity.get_name() ]].query
+    @classmethod
+    def all_paginated(self, page, per_page, ids=None):
+        query = self.query
         query = query.filter_by(is_deleted=False)
-        query = query.order_by([[ entity.get_name() ]].[[ entity.get_main_attribute().name]].asc())
+        query = query.order_by(self.[[ entity.get_main_attribute().name]].asc())
         if ids:
-            query = query.filter([[ entity.get_name() ]].id.in_(ids))
+            query = query.filter(self.id.in_(ids))
         return query.paginate(page=page, per_page=per_page, error_out=False)
 
-    @staticmethod
-    def get(id):
-        [[entity.get_name_delimited()]] = [[ entity.get_name() ]].query.get(id)
+    @classmethod
+    def get(self, id):
+        [[entity.get_name_delimited()]] = self.query.get(id)
         return [[entity.get_name_delimited()]] if [[entity.get_name_delimited()]] and [[entity.get_name_delimited()]].is_deleted==False else None
         
 
-    @staticmethod
-    def get_all(ids):
+    @classmethod
+    def get_all(self, ids):
         if not ids:
             return []
-        query = [[ entity.get_name() ]].query
+        query = self.query
         query = query.filter_by(is_deleted=False)
-        return query.filter([[ entity.get_name() ]].id.in_(ids)).all()
+        return query.filter(self.id.in_(ids)).all()
 
 [% for attribute in entity.attributes %][% if attribute.searchable %]
-    @staticmethod
-    def find_by_[[ attribute.name ]]([[ attribute.name ]]):
-        query = [[ entity.get_name() ]].query.order_by([[ attribute.type.get_order_query_for_model() ]].asc())
-        return query.filter_by([[ attribute.name ]]=[[ attribute.name ]], is_deleted=False)
+    @classmethod
+    def find_by_[[ attribute.name ]](self, [[ attribute.name ]]):
+        query = self.query.order_by([[ attribute.type.get_order_query_for_model() ]].asc())
+        return query.filter_by([[ attribute.name ]]=[[ attribute.name ]], is_deleted=False).all()
 
 [% endif %][% endfor %]
 [% if entity.is_user() %]
