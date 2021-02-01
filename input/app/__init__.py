@@ -1,3 +1,4 @@
+
 from os import path, environ
 
 from flask import Flask
@@ -42,9 +43,6 @@ def create_app(environment="development"):
 
     # Se agrega la ruta por defecto para subir archivos a la configuracion
     app.config['UPLOAD_FOLDER'] = "app/static/uploads"
-
-    # Se agrega la URL de la api de referencia a la configuracion
-    app.config["REFERENCES_API_URL"] = "https://api-referencias.proyecto2020.linti.unlp.edu.ar"
 
     # Establece las rutas que posee la app
     set_routes(app)

@@ -1,3 +1,4 @@
+
 from flask_login import LoginManager, current_user
 from app.models import User
 

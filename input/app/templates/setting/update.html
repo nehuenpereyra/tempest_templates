@@ -28,7 +28,7 @@
                                             <h4 class="text-dark mb-4">Configuraciones</h4>
                                         </div>
                                     -->
-                                        <form action="{{ url_for('configuration_update') }}" method="post"  class="needs-validation user">
+                                        <form action="{{ url_for('setting_update') }}" method="post"  class="needs-validation user">
                                             {{ form.hidden_tag() }}
                                             <div class="form-group">{{input(form.title,"Ingrese el titulo de la página")}} </div>
                                             <div class="form-group">{{input(form.description,"Ingrese la descripción de la página")}} </div>

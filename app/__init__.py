@@ -8,11 +8,17 @@ from app.models import EntityBuilder
 
 def run():
 
-    main_json = load_json("template_data/main.json")
+    main_json_path = os.environ.get("CONFIG_FILE")
+
+    if not main_json_path:
+        print("error: config file is not setted")
+        return False
+
+    main_json = load_json(main_json_path)
     builder = EntityBuilder()
 
     for entity_route in main_json["entities"]:
-        builder.add_entity(load_json("template_data/" + entity_route))
+        builder.add_entity(load_json(os.path.join(os.path.dirname(main_json_path), entity_route)))
 
     entities = builder.build()
 
@@ -23,6 +29,7 @@ def run():
     generate_views(main_json, entities)
     generate_resourse(main_json, entities)
 
+    return True
 
 def generate_structure(main_json):
 

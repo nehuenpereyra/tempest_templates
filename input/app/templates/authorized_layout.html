@@ -12,8 +12,8 @@
                 {% if verify_permission('user_index') %}
                 <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('user_index') }}"><i class="fas fa-user" style="color: white;"></i><span style="/*color: white;*/">Usuarios</span></a></li>
                 {% endif %}
-                {% if verify_permission('configuration_update') %}
-                <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('configuration_edit') }}"><i class="fas fa-tools" style="color: white;"></i><span style="/*color: white;*/">Configuración</span></a></li>
+                {% if verify_permission('setting_update') %}
+                <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('setting_edit') }}"><i class="fas fa-tools" style="color: white;"></i><span style="/*color: white;*/">Configuración</span></a></li>
                 {% endif %}
             </ul>
             <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>

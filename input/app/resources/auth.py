@@ -1,14 +1,14 @@
+
 from flask import redirect, render_template, url_for
 from flask_login import login_user, logout_user
-from flask_login import current_user
 
 from app.models import User
-from app.helpers.forms.login_form import LoginForm
 from app.helpers.login import authenticated
+from app.helpers.forms import LoginForm
 
 
 def login():
-    if authenticated() == True:
+    if authenticated():
         return redirect(url_for("index"))
     return render_template("auth/login.html", form=LoginForm())
 
