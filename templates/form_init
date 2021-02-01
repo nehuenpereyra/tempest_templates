@@ -1,5 +1,7 @@
 
-from .translate_form import TranslateForm
+from .translate import TranslateForm
+from .setting import SettingForm
+from .login import LoginForm
 
 [% for entity in entities %]
 from .[[ entity.get_name_delimited() ]] import [[ entity.get_name() ]]Form

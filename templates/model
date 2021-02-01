@@ -3,7 +3,7 @@ from app.db import db
 [% if entity.is_user() %]
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-[% endif%] 
+[% endif %] 
 [% for import_element in entity.get_import_list_for_model() %]
 [[ import_element ]]
 [% endfor %]
@@ -14,15 +14,7 @@ def get_permission_method(user, permission):
     permission_mapper = {
         "user": user.allowed_user_id_list,
         "role": user.allowed_role_id_list,
-        "permission": user.allowed_permission_id_list,
-        "request": user.allowed_request_id_list,
-        "career": user.allowed_career_id_list,
-        "cathedra": user.allowed_cathedra_id_list,
-        "office": user.allowed_office_id_list,
-        "charge": user.allowed_charge_id_list,
-        "employee": user.allowed_employee_id_list,
-        "job_position": user.allowed_job_position_id_list,
-        "request_type": user.allowed_request_type_id_list
+        "permission": user.allowed_permission_id_list
     }
 
     return permission_mapper[permission]
@@ -153,29 +145,5 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
         return self.roles.flat_collect(lambda each: each.permissions). \
             remove_duplicated(). \
             collect(lambda each: each.id)
-
-    def allowed_request_id_list(self):
-        return self.requests.collect(lambda each: each.id)
-    
-    def allowed_request_type_id_list(self):
-        return None
-
-    def allowed_career_id_list(self):
-        return None
-
-    def allowed_cathedra_id_list(self):
-        return None
-
-    def allowed_office_id_list(self):
-        return None
-
-    def allowed_charge_id_list(self):
-        return None
-
-    def allowed_employee_id_list(self):
-        return None
-
-    def allowed_job_position_id_list(self):
-        return None
 
 [% endif%] 

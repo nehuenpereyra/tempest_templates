@@ -2,11 +2,9 @@
 from flask import redirect, render_template, request, url_for
 from flask_login import current_user
 
-from app.models.configuration import Configuration
-from app.models.alert import Alert
 from app.helpers.alert import add_alert, get_alert
 from app.helpers.permission import permission
-from app.models import [[entity.get_name()]][[entity.get_names_relationship_attributes()]]
+from app.models import [[entity.get_name()]][[entity.get_names_relationship_attributes()]], Setting, Alert
 from app.helpers.forms import [[entity.get_name()]]Form
 
 @permission('[[entity.get_name_delimited()]]_index')
@@ -17,7 +15,7 @@ def index():
         allowed_[[ entity.get_name_delimited() ]]_ids = current_user.allowed_[[ entity.get_name_delimited() ]]_id_list()
 
     [[entity.get_name_plural_delimited()]] = [[entity.get_name()]].all_paginated(page=int(request.args.get('page', 1)),
-                        per_page=Configuration.get().items_per_page, ids=allowed_[[ entity.get_name_delimited() ]]_ids)
+                        per_page=Setting.get().items_per_page, ids=allowed_[[ entity.get_name_delimited() ]]_ids)
     return render_template("[[entity.get_name_delimited()]]/index.html", [[entity.get_name_plural_delimited()]]=[[entity.get_name_plural_delimited()]], alert=get_alert())
 
 

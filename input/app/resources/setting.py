@@ -6,7 +6,7 @@ from app.helpers.permission import permission
 from app.helpers.alert import add_alert
 from app.helpers.forms import SettingForm
 
-from app.models Setting, Alert
+from app.models import Setting, Alert
 
 
 @permission('setting_update')

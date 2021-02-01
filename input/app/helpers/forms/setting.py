@@ -6,7 +6,7 @@ from wtforms.widgets import TextArea
 from wtforms.fields.html5 import EmailField
 
 
-class ConfigurationForm(TranslateForm):
+class SettingForm(TranslateForm):
     title = StringField('Titulo', validators=[DataRequired(), Length(max=32)])
     description = StringField('Descripción', validators=[
                               DataRequired(), Length(max=160)], widget=TextArea())
