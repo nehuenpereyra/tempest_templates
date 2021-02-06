@@ -11,6 +11,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 [% if entity.is_user() %]
 def get_permission_method(user, permission):
 
+    permission = "_".join(permission.split("_")[0:-1])
+
     permission_mapper = {
         "user": user.allowed_user_id_list,
         "role": user.allowed_role_id_list,
@@ -126,7 +128,7 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
             return True
 
         allowed_id_list_method = get_permission_method(
-            self, permission.split("_").first())
+            self, permission)
 
         allowed_id_list = allowed_id_list_method()
 
