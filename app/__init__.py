@@ -28,8 +28,10 @@ def run():
     generate_routes(main_json, entities)
     generate_views(main_json, entities)
     generate_resourse(main_json, entities)
+    generate_seeds(main_json, entities)
 
     return True
+
 
 def generate_structure(main_json):
 
@@ -175,3 +177,16 @@ def generate_resourse(main_json, entities):
         os.path.join(resource_path, each.get_name_delimited() + ".py"),
         render_template("resource", entity=each, main_json=main_json)
     ))
+
+
+def generate_seeds(main_json, entities):
+
+    seeds_path = os.path.join(main_json["output"]["root"],
+                                 main_json["output"]["seeds"])
+
+    os.makedirs(seeds_path, exist_ok=True)
+
+    write_file(
+        os.path.join(seeds_path, "permission.py"),
+        render_template("seeds/permission", entities=entities)
+    )
