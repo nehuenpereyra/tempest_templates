@@ -58,7 +58,8 @@
                 </li>
             {% endfor %}
         </ul>
+        {{ pagination([[entity.get_name_plural_delimited()]], '[[entity.get_name_delimited()]]_index' )}}
+    {% else %}
+        <small class="mt-3">No se encontraron elementos.</small>
     {% endif %}
-
-    {{ pagination([[entity.get_name_plural_delimited()]], '[[entity.get_name_delimited()]]_index' )}}
 [% endblock %]
