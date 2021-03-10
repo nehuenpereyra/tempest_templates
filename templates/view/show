@@ -1,7 +1,7 @@
 
 [% extends "view/layout" %]
 
-[% block title %][[ entity.label ]] - {{ [[ entity.get_name_delimited() ]].[[ entity.get_main_attribute().name ]] }}[% endblock %]
+[% block title %][[ entity.label ]] {{ [[ entity.get_name_delimited() ]].[[ entity.get_main_attribute().name ]] }}[% endblock %]
 
 [% block content %]
     <h5 class="mt-3">Informacion de [[ entity.label ]]</h5>
@@ -27,7 +27,18 @@
     <ul class="list-group shadow-sm my-4 mx-2">
 [% for attribute in entity.attributes %]
         <li class="list-group-item">
-            <h6[% if not attribute.type.is_relationship() or attribute.type.has_cardinality_one() %] class="mb-0"[% endif %]>[[ attribute.label ]]</h6>{{ show_field([[ entity.get_name_delimited() ]].[% if attribute.type.is_relationship() and attribute.type.has_cardinality_many() %]get_[[ attribute.name ]]()[% else %][[ attribute.name ]][% endif %][% if attribute.type.is_relationship() %][% if attribute.type.has_cardinality_many() %], list=True[% endif %], attribute="[[ attribute.type.linked_attribute_presented.name ]]", link="[[ attribute.type.linked_attribute.entity.get_name_delimited() ]]_show"[% endif %], required=[[ attribute.validations[0].is_required ]])|safe }}
+            [[ "<h6{}>{}</h6>{{{{ show_field({})|safe }}}}".format(
+                ' class="mb-0"' if not attribute.type.is_relationship() or attribute.type.has_cardinality_one() else '',
+                attribute.label,
+                '{}.{}{}'.format(
+                    entity.get_name_delimited(),
+                    attribute.name,
+                    ', attribute="{}", link="{}"'.format(
+                        attribute.type.linked_attribute_presented.name,
+                        attribute.type.linked_attribute.entity.get_name_delimited() + "_show"
+                    ) if attribute.type.is_relationship() else ''
+                )
+            ) ]]
         </li>
 [% endfor %]
     </ul>

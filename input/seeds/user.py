@@ -1,6 +1,5 @@
 
 from flask_seeder import Seeder
-from werkzeug.security import generate_password_hash
 
 from app.models import User, Role
 
@@ -18,6 +17,6 @@ class UserSeeder(Seeder):
             name="Juan",
             surname="Lopez",
             username="admin",
-            password=generate_password_hash("password"),
+            password="password",
             roles=[roles["Administrador"]]
         ).save()

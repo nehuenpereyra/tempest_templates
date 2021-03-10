@@ -27,7 +27,7 @@ class Attribute:
 
     def to_model(self):
         if not self.type.is_relationship():
-            result = '{} = db.Column("{}", db.{}{})'.format(
+            result = '__{} = db.Column("{}", db.{}{})'.format(
                 self.name,
                 self.name,
                 self.type.to_model(),
@@ -37,8 +37,9 @@ class Attribute:
         else:
             linked_attribute = self.type.linked_attribute
 
-            result = '{} = db.relationship("{}", back_populates="{}"{})'.format(
+            result = '__{} = db.relationship("{}", back_populates="_{}__{}"{})'.format(
                 self.name,
+                linked_attribute.entity.get_name(),
                 linked_attribute.entity.get_name(),
                 linked_attribute.name,
                 list(self.get_model_arguments().items()).inject(
@@ -50,7 +51,7 @@ class Attribute:
 
             if self.type.has_cardinality_one():
                 if self.type.has_foreign_key:
-                    result += '\n{}{} = db.Column("{}", db.Integer, db.ForeignKey("{}.id"){})'.format(
+                    result += '\n{}__{} = db.Column("{}", db.Integer, db.ForeignKey("{}.id"){})'.format(
                         " " * 4,
                         f"{self.name}_id",
                         f"{self.name}_id",

@@ -33,6 +33,23 @@ class Entity:
             return name[:-1] + "ies"
         return name + "s"
 
+    def get_plural_label(self):
+        label = self.label
+        last_character = label[-1]
+
+        if last_character == "a" or last_character == "e" or last_character == "i" or last_character == "o" or last_character == "u":
+            label += "s"
+        else:
+            if last_character == "z":
+                label[-1] = "c"
+
+            label += "es"
+        
+        return label
+
+    def get_lower_plural_label(self):
+        return self.get_plural_label().lower()
+
     def get_main_attribute(self):
         return self.attributes.detect(lambda each: each.is_main, None)
 
@@ -78,6 +95,9 @@ class Entity:
 
     def get_many_to_many_relationship_attributes(self):
         return self.attributes.select(lambda each: each.type.is_relationship() and each.type.has_cardinality_many_to_many())
+
+    def get_relationship_attributes_with_dependencies(self):
+        return self.attributes.select(lambda each: each.type.is_relationship() and each.type.has_dependency)
 
     def get_model_import_for_form(self):
 
@@ -139,12 +159,27 @@ class Entity:
     def get_list_of_loadable_argument_names(self):
         return self.get_loadable_attributes().collect(lambda each: each.name)
 
-    def get__list_args_resource(self):
-        return ", ".join(self.get_loadable_attributes().collect(lambda each: "{} = {}".format(
-            each.name,
-            f"form.{each.name}.data" if not each.type.is_relationship()
-            else self.get_resource_relation_argument(each)
-        )))
+    def get__list_args_resource(self, identation=0):
+        loadable_attributes = self.get_loadable_attributes()
+        
+        if identation < 1 or loadable_attributes.size() < 3:
+            separated_by_format = ", "
+            global_format = "{}"
+        else:
+            separated_by_format = ",\n" + " " * ((identation + 1) * 4)
+            global_format =  "\n{}{{}}\n{}".format(
+                " " * ((identation + 1) * 4),
+                " " * (identation * 4)
+            )
+        
+        return loadable_attributes.as_string(
+            lambda each: "{}={}".format(
+                each.name,
+                self.get_resource_argument_value(each)
+            ),
+            separated_by=separated_by_format,
+            global_format=global_format
+        )
 
     def get_resource_relation_argument(self, attribute):
         return "{}.{}(form.{}.data)".format(
@@ -152,6 +187,12 @@ class Entity:
             "get" if attribute.type.has_cardinality_one() else "get_all",
             attribute.name
         )
+
+    def get_resource_argument_value(self, attribute):
+        if attribute.type.is_relationship():
+            return self.get_resource_relation_argument(attribute)
+        
+        return f"form.{attribute.name}.data" 
 
     def get_loadable_attributes(self):
         return self.attributes.select(lambda each: each.is_loadable)

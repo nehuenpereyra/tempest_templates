@@ -6,6 +6,9 @@ from app.models import Permission
 
 
 def verify_permission(permission, id=None):
+    if current_user.is_admin():
+        return True
+    
     return current_user.has_permission_for(permission, id)
 
 

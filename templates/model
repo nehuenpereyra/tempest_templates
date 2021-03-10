@@ -1,4 +1,6 @@
 
+from sqlalchemy.ext.hybrid import hybrid_property
+
 from app.db import db
 [% if entity.is_user() %]
 from flask_login import UserMixin
@@ -24,94 +26,56 @@ def get_permission_method(user, permission):
 
 class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Model):
 
-    id = db.Column("id", db.Integer, primary_key=True)
+    __id = db.Column("id", db.Integer, primary_key=True)
 [% for attribute in entity.attributes %]
     [[ attribute.to_model() ]]
 [% endfor %]
-    is_deleted = db.Column(db.Boolean, nullable=False, default=False)
+    __is_deleted = db.Column("is_deleted", db.Boolean, nullable=False, default=False)
 
-[% for attribute in entity.get_many_relationship_attributes() %]
-    def get_[[ attribute.name ]](self):
-        return self.[[ attribute.name ]].select(lambda each: not each.is_deleted)
+    @hybrid_property
+    def id(self):
+        return self.__id
 
-    def set_[[ attribute.name ]](self, [[ attribute.name ]]):
-        self.[[ attribute.name ]] = self.[[ attribute.name ]].select(
-            lambda each: each.is_deleted) + [[ attribute.name ]]
-[% endfor %]
-
-    def save(self):
-        if not self.id:
-            db.session.add(self)
-        db.session.commit()
-
-    def update(self, [[ ", ".join(entity.get_list_of_loadable_argument_names()) ]]):
-[% for attribute in entity.get_loadable_attributes() %]
+[% for attribute in entity.attributes %]
 [% if attribute.type.is_relationship() and attribute.type.has_cardinality_many() %]
-        self.set_[[ attribute.name ]]([[ attribute.name ]])
-[% else %]
-        self.[[ attribute.name ]] = [[ attribute.name ]]
-[% endif %]
-[% endfor %]
-        self.save()
-
-    def remove(self):
-        if self.id:
-            self.is_deleted = True
-            self.save()
-
-    @classmethod
-    def delete(self, id):
-        [[ entity.get_name_delimited() ]] = self.query.get(id)
-        if [[ entity.get_name_delimited() ]]:
-            [[ entity.get_name_delimited() ]].remove()
-            return [[ entity.get_name_delimited() ]]
-        return None
-
-    @classmethod
-    def all(self):
-        query = self.query
-        query = query.filter_by(is_deleted=False)
-        query = query.order_by(self.[[ entity.get_main_attribute().name]].asc())
-        return query.all()
-
-    @classmethod
-    def all_paginated(self, page, per_page, ids=None):
-        query = self.query
-        query = query.filter_by(is_deleted=False)
-        query = query.order_by(self.[[ entity.get_main_attribute().name]].asc())
-        if ids:
-            query = query.filter(self.id.in_(ids))
-        return query.paginate(page=page, per_page=per_page, error_out=False)
-
-    @classmethod
-    def get(self, id):
-        [[entity.get_name_delimited()]] = self.query.get(id)
-        return [[entity.get_name_delimited()]] if [[entity.get_name_delimited()]] and [[entity.get_name_delimited()]].is_deleted==False else None
+    @hybrid_property
+    def [[ attribute.name ]](self):
+        if not isinstance(self.__[[ attribute.name ]], list):
+            return self.__[[ attribute.name ]]
         
+        return self.__[[ attribute.name ]].select(lambda each: not each.is_deleted)
 
-    @classmethod
-    def get_all(self, ids):
-        if not ids:
-            return []
-        query = self.query
-        query = query.filter_by(is_deleted=False)
-        return query.filter(self.id.in_(ids)).all()
-
-[% for attribute in entity.attributes %][% if attribute.searchable %]
-    @classmethod
-    def find_by_[[ attribute.name ]](self, [[ attribute.name ]]):
-        query = self.query.order_by([[ attribute.type.get_order_query_for_model() ]].asc())
-        return query.filter_by([[ attribute.name ]]=[[ attribute.name ]], is_deleted=False).all()
-
-[% endif %][% endfor %]
+    @[[ attribute.name ]].setter
+    def [[ attribute.name ]](self, [[ attribute.name ]]):
+        self.__[[ attribute.name ]] = self.__[[ attribute.name ]].select(lambda each: each.is_deleted) + [[ attribute.name ]]
+[% elif entity.is_user() and attribute.name == "password" %]
+    @hybrid_property
+    def password(self):
+        return self.__password
+    
+    @password.setter
+    def password(self, password):
+        self.__password = generate_password_hash(password)
+[% else %]
+    @hybrid_property
+    def [[ attribute.name ]](self):
+        return self.__[[ attribute.name ]]
+    
+    @[[ attribute.name ]].setter
+    def [[ attribute.name ]](self, [[ attribute.name ]]):
+        self.__[[ attribute.name ]] = [[ attribute.name ]]
+[% endif %]
+    
+[% endfor %]
+    @hybrid_property
+    def is_deleted(self):
+        return self.__is_deleted
+    
 [% if entity.is_user() %]
-    def set_password(self, password):
-        self.password = generate_password_hash(password)
-
-    @staticmethod
-    def login(username, password):
+    @classmethod
+    def login(self, username, password):
         user = User.query.filter_by(username=username).first()
-        if user and (check_password_hash(user.password, password)):
+        if user and (check_password_hash(user.__password, password)):
             return user
         return None
     
@@ -124,7 +88,7 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
 
         if not has_permission:
             return False
-        elif not id or self.is_admin():
+        elif not id:
             return True
 
         allowed_id_list_method = get_permission_method(
@@ -138,7 +102,7 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
         return allowed_id_list.includes(id)
 
     def allowed_user_id_list(self):
-        return [self.id]
+        return [self.__id]
 
     def allowed_role_id_list(self):
         return self.roles.collect(lambda each: each.id)
@@ -148,4 +112,49 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
             remove_duplicated(). \
             collect(lambda each: each.id)
 
-[% endif%] 
+[% endif%]
+    def save(self):
+        if not self.__id:
+            db.session.add(self)
+        db.session.commit()
+
+    def update(self, [[ ", ".join(entity.get_list_of_loadable_argument_names()) ]]):
+[% for attribute in entity.get_loadable_attributes() %]
+        self.[[ attribute.name ]] = [[ attribute.name ]]
+[% endfor %]
+        
+        self.save()
+
+    def remove(self):
+        if self.__id:
+            self.__is_deleted = True
+            self.save()
+
+    @classmethod
+    def all(self):
+        return self.query.filter_by(is_deleted=False).order_by(self.__[[ entity.get_main_attribute().name]].asc()).all()
+
+    @classmethod
+    def all_paginated(self, page, per_page, ids=None):
+        query = self.query.filter_by(is_deleted=False).order_by(self.__[[ entity.get_main_attribute().name]].asc())
+        if ids:
+            query = query.filter(self.__id.in_(ids))
+        return query.paginate(page=page, per_page=per_page, error_out=False)
+
+    @classmethod
+    def get(self, id):
+        [[ entity.get_name_delimited() ]] = self.query.get(id)
+        if not [[ entity.get_name_delimited() ]] or [[ entity.get_name_delimited() ]]._[[ entity.get_name() ]]__is_deleted:
+            return None
+        
+        return [[ entity.get_name_delimited() ]]
+    
+    @classmethod
+    def get_all(self, ids):
+        return self.query.filter_by(is_deleted=False).filter(self.__id.in_(ids)).all()
+[% for attribute in entity.attributes %][% if attribute.searchable %]
+
+    @classmethod
+    def find_by_[[ attribute.name ]](self, [[ attribute.name ]]):
+        return self.query.order_by([[ attribute.type.get_order_query_for_model() ]].asc()).filter_by([[ attribute.name ]]=[[ attribute.name ]], is_deleted=False).all()
+[% endif %][% endfor %]

@@ -3,7 +3,7 @@
 
 {% extends "[[ extends ]]" %}
 
-{% block title %}[% block title %][% endblock %]{% endblock %}
+{% block title %}{{ super() }} - [% block title %][% endblock %]{% endblock %}
 
 {% block [[ main_block ]] %}
 

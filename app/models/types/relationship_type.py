@@ -4,14 +4,14 @@ from .type import Type
 
 class RelationshipType(Type):
 
-    def __init__(self, attribute, linked_entity, linked, cardinality, has_foreign_key=False):
+    def __init__(self, attribute, linked_entity, linked, cardinality, has_foreign_key=False, has_dependency=False):
         super().__init__(attribute)
 
         self.linked_attribute = None
         self.linked_attribute_presented = linked["attribute_presented"]
         self.cardinality = cardinality
         self.has_foreign_key = has_foreign_key
-        self.mark = None
+        self.has_dependency = has_dependency
 
         if linked_entity:
 
@@ -104,8 +104,14 @@ class RelationshipType(Type):
 
         if self.has_cardinality_one():
             arguments["uselist"] = False
-        elif self.has_cardinality_many_to_many():
-            arguments["secondary"] = self.get_import_link()
+        else:
+            if self.has_cardinality_many_to_many():
+                arguments["secondary"] = self.get_import_link()
+
+            arguments["order_by"] = '"asc({}.{})"'.format(
+                self.linked_attribute.entity.get_name(),
+                self.linked_attribute.entity.get_main_attribute().name
+            )
 
         return arguments
 

@@ -26,4 +26,4 @@ class Type:
         return {}
 
     def get_order_query_for_model(self):
-        return f"self.{self.attribute.entity.get_main_attribute().name}"
+        return f"self.__{self.attribute.entity.get_main_attribute().name}"
