@@ -8,7 +8,6 @@
 [% block title %][[ entity.get_plural_label() ]][% endblock %]
 
 [% block content %]
-    
     {% if alert %}
         {{ show_alert(alert) }}
     {% endif %}

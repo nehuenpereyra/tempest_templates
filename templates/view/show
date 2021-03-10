@@ -33,9 +33,11 @@
                 '{}.{}{}'.format(
                     entity.get_name_delimited(),
                     attribute.name,
-                    ', attribute="{}", link="{}"'.format(
+                    ', attribute="{}"{}'.format(
                         attribute.type.linked_attribute_presented.name,
-                        attribute.type.linked_attribute.entity.get_name_delimited() + "_show"
+                        ', link="{}"'.format(
+                            attribute.type.linked_attribute.entity.get_name_delimited() + "_show"
+                        ) if not attribute.type.linked_attribute.entity.model_only else ''
                     ) if attribute.type.is_relationship() else ''
                 )
             ) ]]

@@ -24,6 +24,8 @@ def run():
 
     generate_structure(main_json)
     generate_model(main_json, entities)
+
+    entities = entities.select(lambda each: not each.model_only)
     generate_form(main_json, entities)
     generate_routes(main_json, entities)
     generate_views(main_json, entities)

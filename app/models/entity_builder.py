@@ -16,6 +16,7 @@ class EntityBuilder:
         entity = Entity(
             name=entity_json["name"],
             label=entity_json["label"],
+            model_only=entity_json.get("model_only", False),
             order=len(self.entities)
         )
         self.entities[entity.name] = entity
