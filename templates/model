@@ -141,6 +141,18 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
             query = query.filter(self.__id.in_(ids))
         return query.paginate(page=page, per_page=per_page, error_out=False)
 
+[% if entity.has_seeker %]
+    @classmethod
+    def search(self, search_field, search_query, page, per_page, ids=None):
+        query = self.query \
+            .filter_by(is_deleted=False) \
+            .order_by(self.__[[ entity.get_main_attribute().name]].asc()) \
+            .filter(getattr(self, search_field).like(f"%{search_query}%"))
+        if ids:
+            query = query.filter(self.__id.in_(ids))
+        return query.paginate(page=page, per_page=per_page, error_out=False)
+
+[% endif %]
     @classmethod
     def get(self, id):
         [[ entity.get_name_delimited() ]] = self.query.get(id)
@@ -152,9 +164,3 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
     @classmethod
     def get_all(self, ids):
         return self.query.filter_by(is_deleted=False).filter(self.__id.in_(ids)).all()
-[% for attribute in entity.attributes %][% if attribute.searchable %]
-
-    @classmethod
-    def find_by_[[ attribute.name ]](self, [[ attribute.name ]]):
-        return self.query.order_by([[ attribute.type.get_order_query_for_model() ]].asc()).filter_by([[ attribute.name ]]=[[ attribute.name ]], is_deleted=False).all()
-[% endif %][% endfor %]

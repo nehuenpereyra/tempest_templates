@@ -1,0 +1,11 @@
+
+from [[ form_module_path ]] import TranslateForm
+
+from wtforms import StringField, SelectField, SubmitField
+from wtforms.validators import Optional, Length
+
+class [[ entity.get_name() ]]SeekerForm(TranslateForm):
+    
+    search_field = SelectField(validators=[Optional()], choices=[[ "[{}]".format(entity.get_search_choices()) ]])
+    search_query = StringField(validators=[Optional(), Length(max=64)])
+

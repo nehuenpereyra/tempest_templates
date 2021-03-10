@@ -9,6 +9,7 @@ class Entity:
     def __init__(self, name, label, order):
         self.name = name
         self.label = label
+        self.has_seeker = False
         self.order = order
         self.attributes = []
 
@@ -206,3 +207,11 @@ class Entity:
             return ""
 
         return ", " + ", ".join(entites_names)
+
+    def get_search_choices(self):
+        return self.attributes \
+            .select(lambda each: each.is_searchable) \
+            .as_string(lambda each: f'("{each.name}", "{each.label}")', separated_by=", ")
+
+    def has_searchable_attributes(self):
+        return self.attributes.any_satisfy(lambda each: each.is_searchable)

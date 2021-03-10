@@ -30,6 +30,9 @@ def run():
     generate_resourse(main_json, entities)
     generate_seeds(main_json, entities)
 
+    if entities.any_satisfy(lambda each: each.has_seeker):
+        generate_seeker_form(main_json, entities.select(lambda each: each.has_seeker))
+
     return True
 
 
@@ -115,6 +118,27 @@ def generate_form(main_json, entities):
     entities.do(lambda each: write_file(
         os.path.join(form_path, each.get_name_delimited() + ".py"),
         render_template("form", entity=each)
+    ))
+
+
+def generate_seeker_form(main_json, entities):
+    
+    seeker_form_path = os.path.join(
+        main_json["output"]["root"],
+        main_json["output"]["forms"],
+        "seekers"
+    )
+    
+    os.makedirs(seeker_form_path, exist_ok=True)
+
+    write_file(
+        os.path.join(seeker_form_path, "__init__.py"),
+        render_template("seeker_form_init", entities=entities)
+    )
+
+    entities.do(lambda each: write_file(
+        os.path.join(seeker_form_path, each.get_name_delimited() + ".py"),
+        render_template("seeker_form", entity=each, form_module_path=main_json["output"]["forms"].replace("/", "."))
     ))
 
 

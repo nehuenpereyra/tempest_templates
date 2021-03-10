@@ -23,6 +23,20 @@
             </a>
         </div>
     {% endif %}
+
+[% if entity.has_seeker %]
+    <form class="my-3 mx-2" method="get">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                {{ search_form.search_field(class_="form-control", style="border-top-right-radius: 0;border-bottom-right-radius: 0;") }}
+            </div>
+                {{ search_form.search_query(class_="form-control", type="search") }}
+            <div class="input-group-append">
+                <input type="submit" class="btn btn-primary" value="Buscar">
+            </div>
+        </div>
+    </form>
+[% endif %]
     
     {% if [[entity.get_name_plural_delimited()]].items %}
         <ul class="list-group border rounded shadow-sm mt-3">

@@ -25,7 +25,7 @@ class EntityBuilder:
                 name=attribute_json["name"],
                 label=attribute_json["label"],
                 default=attribute_json.get("default", None),
-                searchable=attribute_json.get("searchable", False),
+                is_searchable=attribute_json.get("is_searchable", False),
                 is_main=attribute_json.get("is_main", False),
                 is_loadable=attribute_json.get("is_loadable", True)
             )
@@ -66,6 +66,8 @@ class EntityBuilder:
 
         if (entity.attributes.all_satisfy(lambda each: not each.is_main)):
             entity.attributes.first().is_main = True
+
+        entity.has_seeker = entity.has_searchable_attributes()
 
     def get_entity(self, entity_name):
         return self.entities.get(entity_name, None)

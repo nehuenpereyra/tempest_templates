@@ -1,3 +1,4 @@
+
 from .translate import TranslateForm
 from wtforms import SubmitField
 [[entity.get_model_import_for_form()]]
