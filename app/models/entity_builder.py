@@ -28,7 +28,8 @@ class EntityBuilder:
                 default=attribute_json.get("default", None),
                 is_searchable=attribute_json.get("is_searchable", False),
                 is_main=attribute_json.get("is_main", False),
-                is_loadable=attribute_json.get("is_loadable", True)
+                is_loadable=attribute_json.get("is_loadable", True),
+                show_in_detail=attribute_json.get("show_in_detail", True)
             )
             entity.add_attribute(attribute)
 

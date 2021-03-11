@@ -25,7 +25,7 @@
     </div>
 
     <ul class="list-group shadow-sm my-4 mx-2">
-[% for attribute in entity.attributes %]
+[% for attribute in entity.get_visible_attributes_for_detail() %]
         <li class="list-group-item">
             [[ "<h6{}>{}</h6>{{{{ show_field({})|safe }}}}".format(
                 ' class="mb-0"' if not attribute.type.is_relationship() or attribute.type.has_cardinality_one() else '',

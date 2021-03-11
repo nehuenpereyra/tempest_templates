@@ -3,13 +3,14 @@ from app.models.types import BooleanType
 
 class Attribute:
 
-    def __init__(self, name, label, default, is_searchable, is_main, is_loadable):
+    def __init__(self, name, label, default, is_searchable, is_main, is_loadable, show_in_detail):
         self.name = name
         self.label = label
         self.default = default
         self.is_searchable = is_searchable
         self.is_main = is_main
         self.is_loadable = is_loadable
+        self.show_in_detail = show_in_detail
         self.type = None
         self.validations = None
 

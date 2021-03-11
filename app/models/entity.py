@@ -55,6 +55,9 @@ class Entity:
     def get_main_attribute(self):
         return self.attributes.detect(lambda each: each.is_main, None)
 
+    def get_visible_attributes_for_detail(self):
+        return self.attributes.select(lambda each: each.show_in_detail)
+
     def add_attribute(self, attribute):
         self.attributes.add(attribute)
         attribute.entity = self
