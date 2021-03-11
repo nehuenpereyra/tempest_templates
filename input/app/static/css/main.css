@@ -25,3 +25,9 @@ body {
   background-color: #224a74;
   border-color: #224a74;
 }
+
+.multiple-search-field:focus {
+  outline: none;
+  box-shadow:none !important;
+  border:1px solid #ccc !important;
+}

@@ -27,9 +27,14 @@
     <form class="my-3 mx-2" method="get">
         <div class="input-group">
             <div class="input-group-prepend">
-                {{ search_form.search_field(class_="form-control", style="border-top-right-radius: 0;border-bottom-right-radius: 0;") }}
+                {% if search_form.search_field.choices.size() > 1 %}
+                    {{ search_form.search_field(class_="form-control input-group-text multiple-search-field", style="border-top-right-radius: 0;border-bottom-right-radius: 0;") }}
+                {% else %}
+                    <label class="input-group-text" for="{{ search_form.search_query.id }}">{{ search_form.search_field.choices.first()[1] }}</label>
+                    <input type="hidden" name="{{ search_form.search_field.name }}" value="{{ search_form.search_field.choices.first()[0] }}">
+                {% endif %}
             </div>
-                {{ search_form.search_query(class_="form-control", type="search") }}
+            {{ search_form.search_query(class_="form-control", type="search") }}
             <div class="input-group-append">
                 <input type="submit" class="btn btn-primary" value="Buscar">
             </div>
