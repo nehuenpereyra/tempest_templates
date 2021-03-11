@@ -219,3 +219,8 @@ class Entity:
 
     def has_searchable_attributes(self):
         return self.attributes.any_satisfy(lambda each: each.is_searchable)
+
+    def has_timestamp_attributes(self):
+        return self.attributes.any_satisfy(
+            lambda each: isinstance(each.type, DateTimeType) and each.type.is_timestamp
+        )

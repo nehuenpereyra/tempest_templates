@@ -28,12 +28,15 @@ class Attribute:
 
     def to_model(self):
         if not self.type.is_relationship():
-            result = '__{} = db.Column("{}", db.{}{})'.format(
+            result = '__{} = db.Column("{}", db.{}{}{})'.format(
                 self.name,
                 self.name,
                 self.type.to_model(),
                 self.validations.select(lambda each: each.to_model())
-                    .inject(lambda each, result: f"{result}, {each.to_model()}", "")
+                    .inject(lambda each, result: f"{result}, {each.to_model()}", ""),
+                list(self.get_model_arguments().items()).as_string(
+                    lambda each: ", {}={}".format(each[0], each[1])
+                )
             )
         else:
             linked_attribute = self.type.linked_attribute
@@ -85,7 +88,9 @@ class Attribute:
         arguments = self.type.get_form_arguments()
 
         if not self.is_required():
-            arguments["filters"] = "[lambda value: value or None]"
+            arguments["filters"] = "[lambda value: value or {}]".format(
+                "None" if not isinstance(self.type, BooleanType) else "False"
+            )
         if self.entity.get_loadable_attributes().first() is self:
             arguments["render_kw"] = {"autofocus": True}
         if self.default != None or type(self.type) == BooleanType:

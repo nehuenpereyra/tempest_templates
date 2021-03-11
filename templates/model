@@ -1,11 +1,14 @@
 
-from sqlalchemy.ext.hybrid import hybrid_property
+[% if entity.has_timestamp_attributes() %]
+from datetime import datetime
 
-from app.db import db
+[% endif %]
+from sqlalchemy.ext.hybrid import hybrid_property
 [% if entity.is_user() %]
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 [% endif %] 
+from app.db import db
 [% for import_element in entity.get_import_list_for_model() %]
 [[ import_element ]]
 [% endfor %]
@@ -22,8 +25,8 @@ def get_permission_method(user, permission):
     }
 
     return permission_mapper[permission]
-[% endif %]
 
+[% endif %]
 class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Model):
 
     __id = db.Column("id", db.Integer, primary_key=True)
