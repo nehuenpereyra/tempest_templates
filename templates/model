@@ -126,10 +126,13 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
         self.save()
 
     def remove(self):
-        if self.__id:
-            self.__is_deleted = True
-            self.save()
+        self.__is_deleted = True
+        self.save()
 
+    def restore(self):
+        self.__is_deleted = False
+        self.save()
+    
     @classmethod
     def all(self):
         return self.query.filter_by(is_deleted=False).order_by(self.__[[ entity.get_main_attribute().name]].asc()).all()
