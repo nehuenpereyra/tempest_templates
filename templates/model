@@ -76,8 +76,8 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
     
 [% if entity.is_user() %]
     @classmethod
-    def login(self, username, password):
-        user = User.query.filter_by(username=username).first()
+    def login(self, email, password):
+        user = User.query.filter_by(email=email).first()
         if user and (check_password_hash(user.__password, password)):
             return user
         return None

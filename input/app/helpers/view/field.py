@@ -1,5 +1,6 @@
 
-from datetime import datetime
+from datetime import datetime, date
+import calendar
 
 from flask import url_for, escape
 
@@ -32,8 +33,12 @@ def __show_field_not_none(field, attribute, link):
 def __get_string_field(field):
     if type(field) is bool:
         return "Si" if field else "No"
-    if type(field) is datetime:
-        return field.strftime("%d/%m/%Y")
+    elif type(field) is datetime or type(field) is date:
+        return "{} de {} del {}".format(
+            field.day,
+            calendar.month_name[field.month].capitalize(),
+            field.year
+        )
     return field
 
 def __show_list_field(field, attribute, link):
@@ -50,7 +55,7 @@ def __show_list_field_with_links(field, attribute, link):
         field.inject(lambda each, result: '{}<a class="list-group-item list-group-item-action" href="{}">{}</a>'.format(
             result,
             url_for(link, id=each.id),
-            escape(getattr(each, attribute))
+            escape(__get_string_field(getattr(each, attribute)))
         ), "")
     )
 
@@ -58,6 +63,6 @@ def __show_list_field_without_links(field, attribute):
     return '<ul class="list-group">{}</ul>'.format(
         field.inject(lambda each, result: '{}<li class="list-group-item">{}</li>'.format(
             result,
-            escape(getattr(each, attribute))
+            escape(__get_string_field(getattr(each, attribute)))
         ), "")
     )

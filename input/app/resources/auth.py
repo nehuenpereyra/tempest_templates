@@ -16,7 +16,7 @@ def login():
 def authenticate():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.login(form.username.data, form.password.data)
+        user = User.login(form.email.data, form.password.data)
         if user:
             login_user(user, remember=form.remember_me.data)
             return redirect(url_for("index"))

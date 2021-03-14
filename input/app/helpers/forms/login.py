@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired
 
 
 class LoginForm(TranslateForm):
-    username = StringField('Usuario', validators=[DataRequired()])
+    email = StringField('Correo Electrónico', validators=[DataRequired()])
     password = PasswordField('Contraseña', validators=[DataRequired()])
     remember_me = BooleanField('Recuérdame')
     submit = SubmitField('Iniciar Sesión')

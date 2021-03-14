@@ -1,5 +1,6 @@
 
 from os import path, environ
+import locale
 
 from flask import Flask
 from flask_session import Session
@@ -40,6 +41,7 @@ def create_app(environment="development"):
     app.jinja_env.globals.update(url_for_page=url_for_page)
 
     sm_list()
+    locale.setlocale(locale.LC_ALL, ("es_ES", "UTF-8"))
 
     # Se agrega la ruta por defecto para subir archivos a la configuracion
     app.config['UPLOAD_FOLDER'] = "app/static/uploads"
