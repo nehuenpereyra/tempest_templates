@@ -1,6 +1,7 @@
 [% extends "view/layout" %]
 
 [% block import %]
+
 {% from 'macros/input.html' import  input %}
 [% endblock %]
 

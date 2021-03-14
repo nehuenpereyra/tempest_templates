@@ -1,4 +1,3 @@
-
 [% extends "view/layout" %]
 
 [% block title %][[ entity.label ]] {{ [[ entity.get_name_delimited() ]].[[ entity.get_main_attribute().name ]] }}[% endblock %]

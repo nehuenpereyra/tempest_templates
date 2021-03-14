@@ -1,6 +1,7 @@
 [% extends "view/layout" %]
 
 [% block import %]
+
 {% from 'macros/alert.html' import  show_alert %}
 {% from 'macros/pagination.html' import  pagination %}
 [% endblock %]
