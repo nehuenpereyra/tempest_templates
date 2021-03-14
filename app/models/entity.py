@@ -6,10 +6,11 @@ from app.models.types import IntegerType, DateTimeType
 
 class Entity:
 
-    def __init__(self, name, label, model_only, order):
+    def __init__(self, name, label, model_only, has_logic_deletion, order):
         self.name = name
         self.label = label
         self.model_only = model_only
+        self.has_logic_deletion = has_logic_deletion
         self.has_seeker = False
         self.order = order
         self.attributes = []

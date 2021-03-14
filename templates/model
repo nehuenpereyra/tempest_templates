@@ -33,14 +33,16 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
 [% for attribute in entity.attributes %]
     [[ attribute.to_model() ]]
 [% endfor %]
+[% if entity.has_logic_deletion %]
     __is_deleted = db.Column("is_deleted", db.Boolean, nullable=False, default=False)
-
+[% endif %]
+    
     @hybrid_property
     def id(self):
         return self.__id
 
 [% for attribute in entity.attributes %]
-[% if attribute.type.is_relationship() and attribute.type.has_cardinality_many() %]
+[% if entity.has_logic_deletion and attribute.type.is_relationship() and attribute.type.has_cardinality_many() %]
     @hybrid_property
     def [[ attribute.name ]](self):
         if not isinstance(self.__[[ attribute.name ]], list):
@@ -70,10 +72,12 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
 [% endif %]
     
 [% endfor %]
+[% if entity.has_logic_deletion %]
     @hybrid_property
     def is_deleted(self):
         return self.__is_deleted
     
+[% endif %]
 [% if entity.is_user() %]
     @classmethod
     def login(self, email, password):
@@ -128,6 +132,7 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
         
         self.save()
 
+[% if entity.has_logic_deletion %]
     def remove(self):
         self.__is_deleted = True
         self.save()
@@ -135,14 +140,19 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
     def restore(self):
         self.__is_deleted = False
         self.save()
-    
+[% else %]
+    def remove(self):
+        db.session.delete(self)
+        db.session.commit()
+[% endif %]
+
     @classmethod
     def all(self):
-        return self.query.filter_by(is_deleted=False).order_by(self.__[[ entity.get_main_attribute().name]].asc()).all()
+        return self.query[% if entity.has_logic_deletion %].filter_by(is_deleted=False)[% endif %].order_by(self.__[[ entity.get_main_attribute().name]].asc()).all()
 
     @classmethod
     def all_paginated(self, page, per_page, ids=None):
-        query = self.query.filter_by(is_deleted=False).order_by(self.__[[ entity.get_main_attribute().name]].asc())
+        query = self.query[% if entity.has_logic_deletion %].filter_by(is_deleted=False)[% endif %].order_by(self.__[[ entity.get_main_attribute().name]].asc())
         if ids:
             query = query.filter(self.__id.in_(ids))
         return query.paginate(page=page, per_page=per_page, error_out=False)
@@ -151,7 +161,9 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
     @classmethod
     def search(self, search_field, search_query, page, per_page, ids=None):
         query = self.query \
+[% if entity.has_logic_deletion %]
             .filter_by(is_deleted=False) \
+[% endif %]
             .order_by(self.__[[ entity.get_main_attribute().name]].asc()) \
             .filter(getattr(self, search_field).like(f"%{search_query}%"))
         if ids:
@@ -161,12 +173,16 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
 [% endif %]
     @classmethod
     def get(self, id):
+[% if entity.has_logic_deletion %]
         [[ entity.get_name_delimited() ]] = self.query.get(id)
         if not [[ entity.get_name_delimited() ]] or [[ entity.get_name_delimited() ]]._[[ entity.get_name() ]]__is_deleted:
             return None
         
         return [[ entity.get_name_delimited() ]]
-    
+[% else %]
+        return self.query.get(id)
+[% endif %]
+
     @classmethod
     def get_all(self, ids):
-        return self.query.filter_by(is_deleted=False).filter(self.__id.in_(ids)).all()
+        return self.query[% if entity.has_logic_deletion %].filter_by(is_deleted=False)[% endif %].filter(self.__id.in_(ids)).all()
