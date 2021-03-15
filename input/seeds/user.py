@@ -16,7 +16,7 @@ class UserSeeder(Seeder):
         User(
             name="Juan",
             surname="Lopez",
-            email="admin@example",
+            email="admin@example.org",
             password="password",
             roles=[roles["Administrador"]]
         ).save()

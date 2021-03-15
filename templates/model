@@ -42,7 +42,7 @@ class [[entity.get_name()]]([% if entity.is_user() %]UserMixin, [% endif%]db.Mod
         return self.__id
 
 [% for attribute in entity.attributes %]
-[% if entity.has_logic_deletion and attribute.type.is_relationship() and attribute.type.has_cardinality_many() %]
+[% if attribute.type.is_relationship() and attribute.type.has_cardinality_many() and attribute.type.linked_attribute.entity.has_logic_deletion %]
     @hybrid_property
     def [[ attribute.name ]](self):
         if not isinstance(self.__[[ attribute.name ]], list):
